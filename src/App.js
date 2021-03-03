@@ -1,6 +1,12 @@
+import React from 'react';
+import {BrowserRouter, Route} from 'react-router-dom';
+import DeviceLogin from './components/deviceLogin'
+
 function App() {
   return (
-    <h1>Hello</h1>
+    <BrowserRouter>
+        <Route path="/" component={DeviceLogin}/>
+    </BrowserRouter>
   );
 }
 
