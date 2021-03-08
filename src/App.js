@@ -1,14 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
 
-import DeviceLogin from './routes/DeviceLogin';
-import RemoteMain from './routes/DeviceRemoteMain';
+import RemoteWebsocket from './utils/websocket/RemoteWebsocket.js'
+import DeviceLogin from './routes/DeviceLogin.js';
+import RemoteMain from './routes/DeviceRemoteMain.js';
 
 function App() {
+  useEffect(() => {
+    RemoteWebsocket();
+  }, [])
+
   return (
     <BrowserRouter>
       <Switch>
-        <Route path="/" exact={true} component={DeviceLogin}/>
+        <Route path={["/", "/remote"]} exact={true} component={DeviceLogin}/>
         <Route paht="/main" component={RemoteMain}/>
       </Switch>
     </BrowserRouter>
