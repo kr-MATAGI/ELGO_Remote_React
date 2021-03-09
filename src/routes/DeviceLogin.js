@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { clientWebsocket, sendDataToServer } from '../utils/websocket/RemoteWebsocket.js';
+import RemoteWebsocket from '../utils/websocket/RemoteWebsocket.js';
 import { actionDefine } from "../utils/websocket/definitions/WebsocketDef.js"
 import LoadingAnimation from '../animations/Loading.js'
 
@@ -19,12 +19,13 @@ export default function DeviceLogin() {
     });
     const { deviceId, devicePw } = inputs;
 
-    const onValueChage = (element) =>{
+    const onValueChange = (element) =>{
         const { value, name } = element.target;
         setInputs({
             ...inputs,
             [name]: value
         });
+        console.log(name, value);
     };
 
     /**
@@ -37,27 +38,17 @@ export default function DeviceLogin() {
             alert("아이디 혹은 비밀번호를 입력해주세요.");
         }       
         else{
-            sendDataToServer({
-                action: actionDefine.DEVICE_LOGIN,
-                deviceLogin: {
-                    id: deviceId,
-                    pw: devicePw
-                }
-            });
             setLoadingStatus(true);
+            clientSocket.test();
         }
     }
 
     return (
         <div className="deviceLogin">
             <LoadingAnimation bIsRender={bRenderLoading}></LoadingAnimation>
-            <h2>ELGO SYSTEM</h2>  
-            <label>
-                <input type="text" name="deviceId" placeholder="아이디를 입력하세요" value={deviceId} onChange={onValueChage}/>
-            </label>
-            <label>
-                <input type="password" name="devicePw" placeholder="비밀번호를 입력하세요" value={devicePw} onChange={onValueChage}/>
-            </label>
+            <h2>ELGO SYSTEM</h2>
+                <input type="text" name="deviceId" placeholder="아이디를 입력하세요" value={deviceId} onChange={onValueChange} />
+                <input type="password" name="devicePw" placeholder="비밀번호를 입력하세요" value={devicePw} onChange={onValueChange} />                    
             <button onClick={deviceLoginVerify}>로그인</button>
         </div>
     );

@@ -1,6 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+const onAccessExternalWAS = () => {
+    // get token from server using axios (http)
+
+    // link to external webserver with jwt
+}
+
 
 // Route url : './main'
 function DeviceRemoteMain() {
@@ -14,11 +20,11 @@ function DeviceRemoteMain() {
                 <Link to="/">
                     <button type="button" onClick="">Wifi 설정</button>
                 </Link>
-                <button type="button" onClick="">기기 관리</button>
-                {/* checking naming*/}
+                {/** TODO : Insert jwt and access web server */}
+                <button type="button" onClick="onAccessExternalWAS">기기 관리</button>
                 <button type="button" onClick="">설정 페이지 암호 변경</button>
                 <button type="button" onClick="">기기 화면 회전</button>
-                <button type="button" onClick="">기타</button>
+                <button type="button" onClick="">옵션</button>
             </div>
         </div>       
     );

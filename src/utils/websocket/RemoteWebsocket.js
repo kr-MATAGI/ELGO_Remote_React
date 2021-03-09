@@ -1,42 +1,32 @@
-export var clientWebsocket = new WebSocket('ws://192.168.0.83:9412');
-var clientStats = {
-    ip: "localhost",
-    bIsConnected : false
-}
+import { cloneElement, useEffect } from "react";
 
 /**
  * Websocket
  */
+ 
+const clientSocket = new WebSocket("ws://192.168.0.83:9412");
+var response = null;
 export default function RemoteWebsocket() {
-    clientWebsocket.onopen = () => {
-        clientStats.bIsConnected = true;
-        console.log('Remote Client Socket is open');
-    }
+    useEffect(() => {    
+        clientSocket.onopen = () => {
+            console.log("Socket is opened");
+        }
 
-    clientWebsocket.onclose = () => {
-        clientStats.bIsConnected = false;
-        console.log('Remote Client Socket is closed');
-    }
+        clientSocket.onerror = (error) => {
+            console.log(error);
+        }
 
-    clientWebsocket.onerror = (error) => {
-        console.log(error);
-    }
+        clientSocket.onmessage = (message) => {
+            response = JSON.parse(message);
+            console.log(response);
+        }
 
-    clientWebsocket.onmessage = (response) => {
-        console.log(response);
-    }
-}
+        clientSocket.onclose = () => {
+            console.log("Socket is closed");
+        }
 
-/**
- * 
- */
-export const sendDataToServer = (data) => {
-    if(clientWebsocket.OPEN === clientWebsocket.readyState) {
-        let jsonData = JSON.stringify(data);
-        clientWebsocket.send(jsonData);
-        console.log(jsonData);
-    }
-    else {
-        console.log('Error - ReadyState : ' + clientWebsocket.readyState);
-    }
+        clientSocket.addEventListener("test", () => {
+            console.log("test EventListener");
+        })
+    }, []);
 }
