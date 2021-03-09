@@ -1,32 +1,40 @@
-import { cloneElement, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 /**
  * Websocket
  */
- 
-const clientSocket = new WebSocket("ws://192.168.0.83:9412");
+const URL = "ws://192.168.0.103:9412";
+const websocket = new WebSocket(URL);
 var response = null;
 export default function RemoteWebsocket() {
     useEffect(() => {    
-        clientSocket.onopen = () => {
-            console.log("Socket is opened");
+        websocket.onopen = () => {
+            console.log('Webscoket is Connected');
         }
 
-        clientSocket.onerror = (error) => {
-            console.log(error);
+        websocket.onmessage = async (event) => {
+            console.log(event.type, event.data);
+            await setResponse(event.data);            
         }
 
-        clientSocket.onmessage = (message) => {
-            response = JSON.parse(message);
-            console.log(response);
+        websocket.onclose = () => {
+            console.log('Websocket is Disconnected');
         }
-
-        clientSocket.onclose = () => {
-            console.log("Socket is closed");
-        }
-
-        clientSocket.addEventListener("test", () => {
-            console.log("test EventListener");
-        })
     }, []);
+}
+
+/**
+ * Websocket Send Message
+ */
+export const sendMessage = async (data) =>{
+    console.log(data);
+    websocket.send(data);
+}
+
+const setResponse = (data) => {
+    response = data;
+}
+
+export const getResponse = () =>{
+    return response;
 }
