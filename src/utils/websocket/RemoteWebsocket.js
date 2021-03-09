@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect} from "react";
 
 /**
  * Websocket
  */
 const URL = "ws://192.168.0.103:9412";
-const websocket = new WebSocket(URL);
+export const websocket = new WebSocket(URL);
 var response = null;
 export default function RemoteWebsocket() {
     useEffect(() => {    
@@ -12,9 +12,8 @@ export default function RemoteWebsocket() {
             console.log('Webscoket is Connected');
         }
 
-        websocket.onmessage = async (event) => {
+        websocket.onmessage = (event) => {
             console.log(event.type, event.data);
-            await setResponse(event.data);            
         }
 
         websocket.onclose = () => {
@@ -29,10 +28,6 @@ export default function RemoteWebsocket() {
 export const sendMessage = async (data) =>{
     console.log(data);
     websocket.send(data);
-}
-
-const setResponse = (data) => {
-    response = data;
 }
 
 export const getResponse = () =>{

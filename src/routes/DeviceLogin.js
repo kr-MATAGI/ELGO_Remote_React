@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
-import {getResponse, sendMessage, response} from "../utils/websocket/RemoteWebsocket.js"
+import {getResponse, sendMessage, websocket} from "../utils/websocket/RemoteWebsocket.js"
 import LoadingAnimation from '../animations/Loading.js'
 
 export default function DeviceLogin() {
+    websocket.onmessage = (event) => {
+        console.log(event.data);
+    }
+
     /**
      * Loading Animation
      */
@@ -46,7 +50,6 @@ export default function DeviceLogin() {
                     }
                 }
             sendMessage(JSON.stringify(deviceLoginJson));
-            console.log(getResponse());
         }
     }
 
