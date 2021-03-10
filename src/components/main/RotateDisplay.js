@@ -1,4 +1,5 @@
 import React from 'react';
+import { ReactComponent as DisplayImg } from '../../img/display.svg';
 
 /**
  * @brief   Heading direction
@@ -18,11 +19,11 @@ function RotateDisplay () {
     return (
         <div className="rootWrap">
             <div className="exampleIconWrap">
-                {/* tabe */}
+                <DisplayImg/>
+
             </div>
             
-            <div className="explainWrap">
-                <p>현재 보이는 방향을 선택하세요.</p>
+            <div className="buttonWrap">
                 <button>적용</button>
             </div>
         </div>
