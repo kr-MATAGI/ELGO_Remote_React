@@ -17,14 +17,24 @@ function DeviceRemoteMain() {
             </div>
             
             <div className="btnWrap">
-                <Link to="/">
-                    <button type="button" onClick="">Wifi 설정</button>
+                <Link to="/wifi">
+                    <button type="button" >Wifi 설정</button>
                 </Link>
+                
                 {/** TODO : Insert jwt and access web server */}
-                <button type="button" onClick="onAccessExternalWAS">기기 관리</button>
-                <button type="button" onClick="">설정 페이지 암호 변경</button>
-                <button type="button" onClick="">기기 화면 회전</button>
-                <button type="button" onClick="">옵션</button>
+                <button type="button" onClick={onAccessExternalWAS}>기기 관리</button>
+                
+                <Link to="/manageDevice">
+                    <button type="button" >기기 암호 변경</button>
+                </Link>
+                
+                <Link to="/rotate">
+                    <button type="button" >기기 화면 회전</button>
+                </Link>
+
+                <Link to="/options">
+                    <button type="button" >옵션</button>
+                </Link>
             </div>
         </div>       
     );

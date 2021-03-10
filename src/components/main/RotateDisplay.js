@@ -3,7 +3,7 @@ import React from 'react';
 function RotateDisplay () {
     return (
         <div className="rootWrap">
-            <div class="exampleIconWrap">
+            <div className="exampleIconWrap">
                 {/* tabe */}
             </div>
             

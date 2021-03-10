@@ -3,9 +3,8 @@ import { useEffect} from "react";
 /**
  * Websocket
  */
-const URL = "ws://192.168.0.103:9412";
+const URL = "ws://192.168.0.83:9412";
 export const websocket = new WebSocket(URL);
-var response = null;
 export default function RemoteWebsocket() {
     useEffect(() => {    
         websocket.onopen = () => {
@@ -25,11 +24,7 @@ export default function RemoteWebsocket() {
 /**
  * Websocket Send Message
  */
-export const sendMessage = async (data) =>{
+export const sendMessage = (data) =>{
     console.log(data);
     websocket.send(data);
-}
-
-export const getResponse = () =>{
-    return response;
 }
