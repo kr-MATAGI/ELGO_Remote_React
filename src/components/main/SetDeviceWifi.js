@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import LoadingAnimation from '../../animations/Loading.js'
 import {sendMessage, websocket} from '../../utils/websocket/RemoteWebsocket.js';
-import {actionDefine} from '../../utils/websocket/definitions/WebsocketDef.js';
+import {ACTION} from '../definitions/commDefinition.js';
 
 export default function SetDeviceWifi () {
     /**
@@ -38,7 +38,7 @@ export default function SetDeviceWifi () {
         setLoadingStatus(true);
         setTimeout(() => {
             let requestLoadWifiList = JSON.stringify({
-                action: actionDefine.LOAD_WIFI_LIST,
+                action: ACTION.LOAD_WIFI_LIST,
             });
             sendMessage(requestLoadWifiList);
             console.log(requestLoadWifiList);

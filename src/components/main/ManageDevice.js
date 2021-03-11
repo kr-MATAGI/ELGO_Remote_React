@@ -2,7 +2,7 @@ import react, {useState} from 'react';
 import LoadingAnimation from '../../animations/Loading.js'
 import {Modal} from '../../utils/dialog/Modal.js';
 import {sendMessage, websocket} from '../../utils/websocket/RemoteWebsocket.js';
-import {actionDefine} from '../../utils/websocket/definitions/WebsocketDef.js';
+import {ACTION} from '../definitions/commDefinition.js';
 import { useHistory } from 'react-router-dom';
 
 /**
@@ -94,7 +94,7 @@ function ChangeDevicePW () {
             }
             else {
                 let requestChangePw = JSON.stringify({
-                    action: actionDefine.CHANGE_DEVICE_PW,
+                    action: ACTION.MANAGE_DEVICE,
                     manageDevice: {
                         oldPassword: originPw,
                         newPassword: newPw

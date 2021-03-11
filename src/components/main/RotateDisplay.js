@@ -1,14 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ReactComponent as DisplayImg } from '../../img/display.svg';
+import LoadingAnimation from '../../animations/Loading.js';
+import {sendMessage, websocket} from '../../utils/websocket/RemoteWebsocket.js';
+import { ACTION } from '../definitions/commDefinition.js'
 
 /**
  * @brief   Heading direction
  */
 const DIRECTION = {
     HEAD_TOP: 1,
-    HEAD_BOTTOM: 2,
-    HEAD_LEFT: 3,
-    HEAD_RIGHT: 4
+    HEAD_RIGHT: 2,
+    HEAD_BOTTOM: 3,
+    HEAD_LEFT: 4
 }
 
 /**
@@ -16,15 +19,64 @@ const DIRECTION = {
  * @note    Heading is standard.
  */
 function RotateDisplay () {
+    /**
+     * @brief   Loading Animation
+     */
+    const [loadingStatus, setLoadingStatus] = useState(false);
+    const bRenderLoading = loadingStatus;
+
+    /**
+     * @brief   Rotate display img when clicked button
+     */
+    const [imgHeading, setImgHeading] = useState(DIRECTION.HEAD_TOP);
+    const [rotationDegree, setRotationDegree] = useState(0);
+    console.log(imgHeading, rotationDegree);
+    const onClickedRotationBtn = () => {
+        setRotationDegree(rotationDegree+90);
+        
+        let heading = imgHeading + 1;
+        if( DIRECTION.HEAD_LEFT < heading){
+            heading = DIRECTION.HEAD_TOP;
+        }
+        setImgHeading(heading);
+    }
+
+    /**
+     * @brief   Websocket onmessage override
+     */
+    websocket.onmessage = (event) => {
+        const response = JSON.parse(event.data);
+        console.log(response);
+        setLoadingStatus(false);
+    }
+
+    /**
+     * @brief   Send current display rotation degree to server(elgo_control)
+     */
+    const onSendRotationDegree = () => {
+        setLoadingStatus(true);
+        setTimeout(() => {
+            const sendJson = JSON.stringify({
+                action: ACTION.ROTATE_DISPLAY,
+                rotateDisplay:{
+                    newHeading: imgHeading
+                }
+            })
+            sendMessage(sendJson);
+            console.log(sendJson);
+        }, 500);
+    }
+
     return (
         <div className="rootWrap">
+            <LoadingAnimation bIsRender={bRenderLoading}></LoadingAnimation>
             <div className="exampleIconWrap">
-                <DisplayImg/>
-
+                <DisplayImg style={{transform: `rotate(${rotationDegree}deg)`}}/>
             </div>
             
             <div className="buttonWrap">
-                <button>적용</button>
+                <button onClick={onClickedRotationBtn}>회전</button>
+                <button onClick={onSendRotationDegree}>적용</button>
             </div>
         </div>
     );

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {sendMessage, websocket} from '../utils/websocket/RemoteWebsocket.js';
-import {actionDefine} from '../utils/websocket/definitions/WebsocketDef.js';
+import {ACTION} from '../components/definitions/commDefinition.js';
 import LoadingAnimation from '../animations/Loading.js';
 import { useHistory } from 'react-router-dom';
 import { Modal } from '../utils/dialog/Modal.js';
@@ -77,7 +77,7 @@ export default function DeviceLogin() {
             // loading anmation 
             setTimeout(() => {
                 const deviceLoginJson = {
-                    action: actionDefine.DEVICE_LOGIN,
+                    action: ACTION.DEVICE_LOGIN,
                         deviceLogin: {
                             id: deviceId,
                             pw: devicePw
