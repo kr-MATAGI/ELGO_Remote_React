@@ -50,7 +50,7 @@ export default function SetDeviceWifi () {
     }
 
     /**
-     * @brief
+     * @brief   Enter Wifi password and verify
      */
     const enterWifiPassword = () => {
 
