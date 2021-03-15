@@ -6,5 +6,6 @@ export const ACTION = {
     DEVICE_LOGIN: 1,
     LOAD_WIFI_LIST: 2,
     MANAGE_DEVICE: 3,
-    ROTATE_DISPLAY: 4
+    ROTATE_DISPLAY: 4,
+    DEVICE_OPTIONS: 5
 }
