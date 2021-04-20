@@ -3,7 +3,7 @@ import { useEffect} from "react";
 /**
  * Websocket
  */
-const URL = "ws://192.168.0.83:9412";
+const URL = "ws://192.168.0.92:9412";
 export const websocket = new WebSocket(URL);
 export default function RemoteWebsocket() {
     useEffect(() => {    
