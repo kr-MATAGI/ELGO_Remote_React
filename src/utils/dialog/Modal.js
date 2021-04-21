@@ -3,7 +3,7 @@ import '../../css/Modal.css';
 
 export const Modal = ( props ) => {
     // 열기, 닫기, 모달 헤더 텍스트를 부모로부터 받아옴
-    const { open, close, header, confirm } = props;
+    const { open, close, header, confirm, bInput } = props;
 
     return (
         // 모달이 열릴때 openModal 클래스가 생성된다.
@@ -12,7 +12,7 @@ export const Modal = ( props ) => {
                 <section>
                     <header>
                         {header}
-                        <button className="close" onClick={close}> &times; </button>
+                        <button className="close" onClick={close}></button>
                     </header>
                     <main>
                         {props.children}

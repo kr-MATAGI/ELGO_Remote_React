@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import LoadingAnimation from '../../animations/Loading.js'
 import {sendMessage, websocket} from '../../utils/websocket/RemoteWebsocket.js';
 import {ACTION} from '../definitions/commDefinition.js';
+import { Modal } from '../../utils/dialog/Modal.js';
 
 import { ReactComponent as WifiDeg4 } from '../../img/wifi_full.svg';
 import { ReactComponent as WifiDeg3 } from '../../img/wifi_3.svg';
@@ -9,46 +10,6 @@ import { ReactComponent as WifiDeg2 } from '../../img/wifi_2.svg';
 import { ReactComponent as WifiDeg1 } from '../../img/wifi_1.svg';
 import { ReactComponent as LockIcon } from '../../img/lock.svg';
 
-function WifiLabel( {ssid, freq, signal, enc} )
-{
-    // wifi icon
-    const newSignal = signal * -1;
-    let wifiDegree;
-    if( 60 >= newSignal ) {
-        wifiDegree = 4;
-    }
-    else if( 60 < newSignal && 70 >= newSignal ) {
-        wifiDegree = 3;
-    }
-    else if( 70 < newSignal && 80 >= newSignal ) {
-        wifiDegree = 2;
-    }
-    else {
-        wifiDegree = 1;
-    }
-
-    return (
-        <span>
-            <li>
-                {
-                    (function() {
-                        if(4 === wifiDegree) return (<WifiDeg4 width="50"/>)
-                        else if(3 === wifiDegree) return (<WifiDeg3 width="50"/>)
-                        else if(2 === wifiDegree) return (<WifiDeg2 width="50"/>)
-                        else return (<WifiDeg1 width="50"/>)
-                    })()
-                }
-                {
-                    (function () {
-                        if(true === enc) return (<LockIcon width="20"/>) 
-                    })()
-                }
-                {ssid}
-                {" "}{freq / 1000}GHz
-            </li>
-        </span>
-    )
-}
 
 export default function SetDeviceWifi () {
     /**
@@ -63,10 +24,33 @@ export default function SetDeviceWifi () {
     const [ wifiInfoList, setWifiInfoList ] = useState([]);
     const displayWifiList = wifiInfoList.map( (element, key) => {
         return (
-        <WifiLabel key={key} ssid={element.ssid} freq={element.freq} 
-                signal={element.signal} enc={element.enc} />
+            <WifiLabel key={key} ssid={element.ssid} freq={element.freq} 
+                    signal={element.signal} enc={element.enc} />
         )
     });
+
+    /**
+     * @brief   Dialog (Modal)
+     */
+    const [modalHeader, setModalHeader] = useState('');
+    const [modalOpen, setModalOpen] = useState(false);
+    const [modalPassword, setModalPassword] = useState('');
+    const openModal = (ssid) => {
+        let headerStr = ssid;
+        headerStr += " 의 비밀번호를 입력해주세요.";
+        setModalHeader(headerStr);
+        setModalOpen(true);
+    }
+    const closeModal = () => {
+        setModalOpen(false);
+
+        //    sendMessage("s")
+    }
+    
+    const onPasswordChange = (element) => {
+        const value = element.target.value
+        setModalPassword(value);
+    }
 
     /**
      * @brief   Title message
@@ -136,6 +120,46 @@ export default function SetDeviceWifi () {
         }, 500);   
     }
 
+    function WifiLabel( {ssid, freq, signal, enc} ) {
+        // wifi icon
+        const newSignal = signal * -1;
+        let wifiDegree;
+        if( 60 >= newSignal ) {
+            wifiDegree = 4;
+        }
+        else if( 60 < newSignal && 70 >= newSignal ) {
+            wifiDegree = 3;
+        }
+        else if( 70 < newSignal && 80 >= newSignal ) {
+            wifiDegree = 2;
+        }
+        else {
+            wifiDegree = 1;
+        }
+
+        return (
+            <span onClick={() => {openModal(ssid)}}>
+                <li>
+                    {
+                        (function() {
+                            if(4 === wifiDegree) return (<WifiDeg4 width="50"/>)
+                            else if(3 === wifiDegree) return (<WifiDeg3 width="50"/>)
+                            else if(2 === wifiDegree) return (<WifiDeg2 width="50"/>)
+                            else return (<WifiDeg1 width="50"/>)
+                        })()
+                    }
+                    {
+                        (function () {
+                            if(true === enc) return (<LockIcon width="20"/>) 
+                        })()
+                    }
+                    {ssid}
+                    {" "}{freq / 1000}GHz
+                </li>
+            </span>
+        )
+    }
+
     /**
      * @brief   Enter Wifi password and verify
      */
@@ -150,6 +174,11 @@ export default function SetDeviceWifi () {
     return(
         <div className="rootWrap">
             <LoadingAnimation bIsRender={bRenderLoading}></LoadingAnimation>
+            <Modal open={modalOpen} close={closeModal} header={modalHeader} confirm="확인">
+                <input type="password" className="modalPassword" value={modalPassword || ''} placeholder="password...."
+                        onChange={onPasswordChange}/>
+            </Modal>
+
             <div className="titleWrap">
                 <p>{titleMessage}</p>
             </div>
