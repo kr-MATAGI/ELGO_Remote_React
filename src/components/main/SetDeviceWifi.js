@@ -27,6 +27,8 @@ export default function SetDeviceWifi () {
      * @brief   Webscoet onmessage override
      */
     websocket.onmessage = (event) =>{
+        setLoadingStatus(false);
+        
         const response = JSON.parse(event.data);
         console.log(response);
     }
@@ -38,14 +40,9 @@ export default function SetDeviceWifi () {
         setLoadingStatus(true);
         setTimeout(() => {
             let requestLoadWifiList = JSON.stringify({
-                action: ACTION.LOAD_WIFI_LIST,
+                action: ACTION.UPDATE_WIFI_LIST,
             });
             sendMessage(requestLoadWifiList);
-            console.log(requestLoadWifiList);
-
-            setLoadingStatus(false);
-
-
         }, 500);   
     }
 

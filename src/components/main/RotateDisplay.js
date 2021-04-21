@@ -14,6 +14,34 @@ const DIRECTION = {
     HEAD_LEFT: 4
 }
 
+const ConvertDirectionToStr = (src) => {
+    let retValue;
+
+    switch (src)
+    {
+        case DIRECTION.HEAD_TOP:
+            retValue = "HEAD_TOP";
+            break;
+
+        case DIRECTION.HEAD_RIGHT:
+            retValue = "HEAD_RIGHT";
+            break;
+        
+        case DIRECTION.HEAD_BOTTOM:
+            retValue = "HEAD_BOTTOM";
+            break;
+
+        case DIRECTION.HEAD_LEFT:
+            retValue = "HEAD_LEFT";
+            break;
+        
+            default:
+            break;
+    }
+
+    return retValue;
+}
+
 /**
  * @brief   Rotate device display
  * @note    Heading is standard.
@@ -59,7 +87,7 @@ function RotateDisplay () {
             const sendJson = JSON.stringify({
                 action: ACTION.ROTATE_DISPLAY,
                 rotateDisplay:{
-                    newHeading: imgHeading
+                    newHeading: ConvertDirectionToStr(imgHeading)
                 }
             })
             sendMessage(sendJson);
