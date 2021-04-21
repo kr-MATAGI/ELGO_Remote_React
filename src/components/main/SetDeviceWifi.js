@@ -3,6 +3,53 @@ import LoadingAnimation from '../../animations/Loading.js'
 import {sendMessage, websocket} from '../../utils/websocket/RemoteWebsocket.js';
 import {ACTION} from '../definitions/commDefinition.js';
 
+import { ReactComponent as WifiDeg4 } from '../../img/wifi_full.svg';
+import { ReactComponent as WifiDeg3 } from '../../img/wifi_3.svg';
+import { ReactComponent as WifiDeg2 } from '../../img/wifi_2.svg';
+import { ReactComponent as WifiDeg1 } from '../../img/wifi_1.svg';
+import { ReactComponent as LockIcon } from '../../img/lock.svg';
+
+function WifiLabel( {ssid, freq, signal, enc} )
+{
+    // wifi icon
+    const newSignal = signal * -1;
+    let wifiDegree;
+    if( 60 >= newSignal ) {
+        wifiDegree = 4;
+    }
+    else if( 60 < newSignal && 70 >= newSignal ) {
+        wifiDegree = 3;
+    }
+    else if( 70 < newSignal && 80 >= newSignal ) {
+        wifiDegree = 2;
+    }
+    else {
+        wifiDegree = 1;
+    }
+
+    return (
+        <span>
+            <li>
+                {
+                    (function() {
+                        if(4 === wifiDegree) return (<WifiDeg4 width="50"/>)
+                        else if(3 === wifiDegree) return (<WifiDeg3 width="50"/>)
+                        else if(2 === wifiDegree) return (<WifiDeg2 width="50"/>)
+                        else return (<WifiDeg1 width="50"/>)
+                    })()
+                }
+                {
+                    (function () {
+                        if(true === enc) return (<LockIcon width="20"/>) 
+                    })()
+                }
+                {ssid}
+                {" "}{freq / 1000}GHz
+            </li>
+        </span>
+    )
+}
+
 export default function SetDeviceWifi () {
     /**
      * @brief   Loading Animation State
@@ -11,10 +58,22 @@ export default function SetDeviceWifi () {
     const bRenderLoading = loadingStatus;
 
     /**
+     * @brief   Wifi Info
+     */
+    const [ wifiInfoList, setWifiInfoList ] = useState([]);
+    const displayWifiList = wifiInfoList.map( (element, key) => {
+        return (
+        <WifiLabel key={key} ssid={element.ssid} freq={element.freq} 
+                signal={element.signal} enc={element.enc} />
+        )
+    });
+
+    /**
      * @brief   Title message
      */
     const networkMessage = {
         Searching: '무선 네트워크 검색 중 입니다.',
+        SearchOk: '사용가능한 네트워크 목록',
         SearchFail: '무선 네트워크 검색을 실패했습니다.',
         Connecting: '무선 네트워크를 연결 중 입니다. 현재 페이지를 유지해주세요.(최대 1분)',
         ConnectSuccess: '무선 네트워크에 연결되었습니다.',
@@ -31,12 +90,43 @@ export default function SetDeviceWifi () {
         
         const response = JSON.parse(event.data);
         console.log(response);
+
+        let result = response.result;
+        if(true === result) {
+            setTitleMessage(networkMessage.SearchOk);
+
+            // sort
+            let wifiList = [];
+            response.wifiList.forEach(element => {
+                let ssid = element.ssid;
+                let freq = element.freq;
+                let signal = element.signal;
+                let enc = element.enc;
+            
+                let wifiInfo = {
+                    ssid: ssid,
+                    freq: freq,
+                    signal: signal,
+                    enc: enc
+                }
+                wifiList.push(wifiInfo);
+            });
+
+            wifiList.sort((lhs, rhs) => {
+                return rhs.signal - lhs.signal;
+            });
+
+            setWifiInfoList(wifiList);
+        }
+        else {
+            setTitleMessage(networkMessage.SearchFail);
+        }
     }
 
     /**
-     * @brief   Load Wifi List
+     * @brief   Update Wifi List
      */
-    const loadAvailableWifiList = () => {
+    const updateAcessibleWifiList = () => {
         setLoadingStatus(true);
         setTimeout(() => {
             let requestLoadWifiList = JSON.stringify({
@@ -54,7 +144,7 @@ export default function SetDeviceWifi () {
     }
 
     useEffect(() => {
-        loadAvailableWifiList();
+        updateAcessibleWifiList();
     }, [])
 
     return(
@@ -64,8 +154,8 @@ export default function SetDeviceWifi () {
                 <p>{titleMessage}</p>
             </div>
 
-            <div className="wifiListWrap">
-
+            <div className="wifiWrap">
+                {displayWifiList}               
             </div>
         </div>
     );
