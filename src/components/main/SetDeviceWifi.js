@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import LoadingAnimation from '../../animations/Loading.js'
 import {sendMessage, websocket} from '../../utils/websocket/RemoteWebsocket.js';
 import {ACTION} from '../definitions/commDefinition.js';
-import { Modal } from '../../utils/dialog/Modal.js';
+import { Modal, getModalInputValue, setModalInputValue } from '../../utils/dialog/Modal.js';
 
 import { ReactComponent as WifiDeg4 } from '../../img/wifi_full.svg';
 import { ReactComponent as WifiDeg3 } from '../../img/wifi_3.svg';
@@ -10,6 +10,18 @@ import { ReactComponent as WifiDeg2 } from '../../img/wifi_2.svg';
 import { ReactComponent as WifiDeg1 } from '../../img/wifi_1.svg';
 import { ReactComponent as LockIcon } from '../../img/lock.svg';
 
+/**
+ * @brief   Network message
+ */
+const networkMessage = {
+    Searching: '무선 네트워크 검색 중 입니다.',
+    SearchOk: '사용가능한 네트워크 목록',
+    SearchFail: '무선 네트워크 검색을 실패했습니다.',
+    Connecting: '무선 네트워크를 연결 중 입니다. (최대 1분)',
+    ConnectSuccess: '무선 네트워크에 연결되었습니다.',
+    ConnectFailed: '무선 네트워크 연결이 실패했습니다.',
+    warningOpenNetwork: '개방향 네트워크 사용은 권장하지 않습니다. 계속하시겠습니까?'
+}
 
 export default function SetDeviceWifi () {
     /**
@@ -21,7 +33,11 @@ export default function SetDeviceWifi () {
     /**
      * @brief   Wifi Info
      */
-    const [ wifiInfoList, setWifiInfoList ] = useState([]);
+    const [selectedWifi, setSelectedWifi] = useState({
+        ssid: '',
+        enc: false
+    });
+    const [wifiInfoList, setWifiInfoList] = useState([]);
     const displayWifiList = wifiInfoList.map( (element, key) => {
         return (
             <WifiLabel key={key} ssid={element.ssid} freq={element.freq} 
@@ -33,37 +49,48 @@ export default function SetDeviceWifi () {
      * @brief   Dialog (Modal)
      */
     const [modalHeader, setModalHeader] = useState('');
+    const [modalBodyStr, setModalBodyStr] = useState('');
     const [modalOpen, setModalOpen] = useState(false);
-    const [modalPassword, setModalPassword] = useState('');
+    const [modalInput, setModalInput] = useState(true);
     const openModal = (ssid) => {
+        const findWifi = wifiInfoList.find((element) => {
+            return element.ssid === ssid;
+        });
+        const wifi = {
+            ssid: findWifi.ssid,
+            enc: findWifi.enc
+        }
+        setSelectedWifi(wifi);
+        
         let headerStr = ssid;
         headerStr += " 의 비밀번호를 입력해주세요.";
         setModalHeader(headerStr);
         setModalOpen(true);
     }
     const closeModal = () => {
-        setModalOpen(false);
+        setLoadingStatus(true);
 
-        //    sendMessage("s")
-    }
-    
-    const onPasswordChange = (element) => {
-        const value = element.target.value
-        setModalPassword(value);
+        const password = getModalInputValue();
+        const headerStr = selectedWifi.ssid + " 에 연결 합니다."
+        setModalInputValue('');
+        setModalHeader(headerStr);
+        setModalInput(false);
+        setModalBodyStr(networkMessage.Connecting);
+
+        const connectWifiJson = {
+            action: ACTION.CONNECT_WIFI,
+            wifi: {
+                ssid: selectedWifi.ssid,
+                password: password,
+                encryption: selectedWifi.enc 
+            }
+        }
+        sendMessage(JSON.stringify(connectWifiJson));        
     }
 
     /**
-     * @brief   Title message
+     * @brief   Title
      */
-    const networkMessage = {
-        Searching: '무선 네트워크 검색 중 입니다.',
-        SearchOk: '사용가능한 네트워크 목록',
-        SearchFail: '무선 네트워크 검색을 실패했습니다.',
-        Connecting: '무선 네트워크를 연결 중 입니다. 현재 페이지를 유지해주세요.(최대 1분)',
-        ConnectSuccess: '무선 네트워크에 연결되었습니다.',
-        ConnectFailed: '무선 네트워크 연결이 실패했습니다.',
-        warningOpenNetwork: '개방향 네트워크 사용은 권장하지 않습니다. 계속하시겠습니까?'
-    }
     const [ titleMessage, setTitleMessage ] = useState(networkMessage.Searching);
 
     /**
@@ -75,36 +102,42 @@ export default function SetDeviceWifi () {
         const response = JSON.parse(event.data);
         console.log(response);
 
-        let result = response.result;
-        if(true === result) {
-            setTitleMessage(networkMessage.SearchOk);
-
-            // sort
-            let wifiList = [];
-            response.wifiList.forEach(element => {
-                let ssid = element.ssid;
-                let freq = element.freq;
-                let signal = element.signal;
-                let enc = element.enc;
-            
-                let wifiInfo = {
-                    ssid: ssid,
-                    freq: freq,
-                    signal: signal,
-                    enc: enc
-                }
-                wifiList.push(wifiInfo);
-            });
-
-            wifiList.sort((lhs, rhs) => {
-                return rhs.signal - lhs.signal;
-            });
-
-            setWifiInfoList(wifiList);
+        if(ACTION.UPDATE_WIFI_LIST === response.action) {
+            if(true === response.result) {
+                setTitleMessage(networkMessage.SearchOk);
+    
+                // sort by signal
+                let wifiList = [];
+                response.wifiList.forEach(element => {
+                    let ssid = element.ssid;
+                    let freq = element.freq;
+                    let signal = element.signal;
+                    let enc = element.enc;
+                
+                    let wifiInfo = {
+                        ssid: ssid,
+                        freq: freq,
+                        signal: signal,
+                        enc: enc
+                    }
+                    wifiList.push(wifiInfo);
+                });
+    
+                wifiList.sort((lhs, rhs) => {
+                    return rhs.signal - lhs.signal;
+                });
+    
+                setWifiInfoList(wifiList);
+            }
+            else {
+                setTitleMessage(networkMessage.SearchFail);
+            }
         }
-        else {
-            setTitleMessage(networkMessage.SearchFail);
-        }
+        else if(ACTION.CONNECT_WIFI === response.action) {
+            setModalOpen(false);
+            setLoadingStatus(false);
+            // setModalInput(true)
+        }        
     }
 
     /**
@@ -174,9 +207,9 @@ export default function SetDeviceWifi () {
     return(
         <div className="rootWrap">
             <LoadingAnimation bIsRender={bRenderLoading}></LoadingAnimation>
-            <Modal open={modalOpen} close={closeModal} header={modalHeader} confirm="확인">
-                <input type="password" className="modalPassword" value={modalPassword || ''} placeholder="password...."
-                        onChange={onPasswordChange}/>
+            <Modal open={modalOpen} close={closeModal} header={modalHeader} confirm="확인" 
+                    isInput={modalInput} inputType="password" placeholderStr="Password...">
+                {modalBodyStr}
             </Modal>
 
             <div className="titleWrap">

@@ -1,12 +1,35 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import '../../css/Modal.css';
 
-export const Modal = ( props ) => {
-    // 열기, 닫기, 모달 헤더 텍스트를 부모로부터 받아옴
-    const { open, close, header, confirm, bInput } = props;
+/**
+ * @note
+ *          true === isInput, show <input type/>
+ *          Use external method - Set/GetModalInputValue
+ */
+var extInputValue = '';
+export function Modal ( props ) {
+    // props
+    const { open, close, header, confirm, isInput, inputType, placeholderStr } = props;
+    
+    // <input />
+    const [inputStr, setInputStr] = useState('');
+    const onInputChange = (element) =>{
+        const value = element.target.value;
+        setInputStr(value);
+        extInputValue = value;
+    }
+
+    /**
+     * @brief   For external method
+     */
+     const updateInputValue = () => {
+        setInputStr(extInputValue);
+    }
+    useEffect(() => {
+        updateInputValue();
+    }, [extInputValue]);
 
     return (
-        // 모달이 열릴때 openModal 클래스가 생성된다.
         <div className={ open ? 'openModal modal' : 'modal' }>
             { open ? (  
                 <section>
@@ -16,6 +39,15 @@ export const Modal = ( props ) => {
                     </header>
                     <main>
                         {props.children}
+                        { 
+                            (function() {
+                                if(true === isInput) {
+                                    return (<p><input type={inputType} className="modalInput"
+                                                    placeholder={placeholderStr}
+                                                    value={inputStr} onChange={onInputChange}/></p>)
+                                }
+                            })()
+                        }
                     </main>
                     <footer>
                         <button className="close" onClick={close}> {confirm} </button>
@@ -24,4 +56,14 @@ export const Modal = ( props ) => {
             ) : null }
         </div>
     )
+}
+
+/**
+ * @brief   External Method
+ */
+export const getModalInputValue = () => {
+    return extInputValue;
+}
+export const setModalInputValue = (value) => {
+    extInputValue = value;
 }
