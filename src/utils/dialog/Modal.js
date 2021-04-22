@@ -9,7 +9,7 @@ import '../../css/Modal.css';
 var extInputValue = '';
 export function Modal ( props ) {
     // props
-    const { open, close, header, confirm, isInput, inputType, placeholderStr } = props;
+    const { open, close, header, confirm, hideBtn, isInput, inputType, placeholderStr } = props;
     
     // <input />
     const [inputStr, setInputStr] = useState('');
@@ -50,7 +50,7 @@ export function Modal ( props ) {
                         }
                     </main>
                     <footer>
-                        <button className="close" onClick={close}> {confirm} </button>
+                        { hideBtn ? null : <button className="close" onClick={close} > {confirm} </button>}
                     </footer>
                 </section>
             ) : null }

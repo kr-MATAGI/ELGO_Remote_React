@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import { useHistory } from 'react-router-dom';
 import LoadingAnimation from '../../animations/Loading.js'
 import {sendMessage, websocket} from '../../utils/websocket/RemoteWebsocket.js';
 import {ACTION} from '../definitions/commDefinition.js';
@@ -25,6 +26,11 @@ const networkMessage = {
 
 export default function SetDeviceWifi () {
     /**
+     * @brief   History
+     */
+    const history = useHistory();
+
+    /**
      * @brief   Loading Animation State
      */
     const [loadingStatus, setLoadingStatus] = useState(false);
@@ -49,6 +55,7 @@ export default function SetDeviceWifi () {
      * @brief   Dialog (Modal)
      */
     const [modalHeader, setModalHeader] = useState('');
+    const [modalBtnHide, setModalBtnHide] = useState(false);
     const [modalBodyStr, setModalBodyStr] = useState('');
     const [modalOpen, setModalOpen] = useState(false);
     const [modalInput, setModalInput] = useState(true);
@@ -62,19 +69,37 @@ export default function SetDeviceWifi () {
         }
         setSelectedWifi(wifi);
         
-        let headerStr = ssid;
-        headerStr += " 의 비밀번호를 입력해주세요.";
+        let headerStr = '';
+        if(true === wifi.enc) {
+            headerStr = ssid;
+            headerStr += " 의 비밀번호를 입력해주세요.";
+        }
+        else {
+            headerStr = ssid;
+            headerStr += " 를 선택하셨습니다.";
+
+            setModalInput(false);
+            
+            let bodyStr = "연결을 계속하시겠습니까?"
+            setModalBodyStr(bodyStr);
+        }
+        
         setModalHeader(headerStr);
         setModalOpen(true);
     }
     const closeModal = () => {
         setLoadingStatus(true);
+        setModalBtnHide(true);
 
-        const password = getModalInputValue();
-        const headerStr = selectedWifi.ssid + " 에 연결 합니다."
-        setModalInputValue('');
+        let headerStr = selectedWifi.ssid + " 에 연결 합니다.";
+        let password = '';
+        if(true === selectedWifi.enc) {
+            password = getModalInputValue();
+            setModalInputValue('');
+            setModalInput(false);
+        }
+
         setModalHeader(headerStr);
-        setModalInput(false);
         setModalBodyStr(networkMessage.Connecting);
 
         const connectWifiJson = {
@@ -89,7 +114,7 @@ export default function SetDeviceWifi () {
     }
 
     /**
-     * @brief   Title
+     * @brief   Title Message
      */
     const [ titleMessage, setTitleMessage ] = useState(networkMessage.Searching);
 
@@ -108,17 +133,12 @@ export default function SetDeviceWifi () {
     
                 // sort by signal
                 let wifiList = [];
-                response.wifiList.forEach(element => {
-                    let ssid = element.ssid;
-                    let freq = element.freq;
-                    let signal = element.signal;
-                    let enc = element.enc;
-                
+                response.wifiList.forEach(element => {               
                     let wifiInfo = {
-                        ssid: ssid,
-                        freq: freq,
-                        signal: signal,
-                        enc: enc
+                        ssid: element.ssid,
+                        freq: element.freq,
+                        signal: element.signal,
+                        enc: element.encryption
                     }
                     wifiList.push(wifiInfo);
                 });
@@ -136,8 +156,20 @@ export default function SetDeviceWifi () {
         else if(ACTION.CONNECT_WIFI === response.action) {
             setModalOpen(false);
             setLoadingStatus(false);
-            // setModalInput(true)
-        }        
+
+            if(true === response.result) {
+                let bodyStr = "네트워크 연결에 성공하였습니다.";
+                setModalBodyStr(bodyStr);
+
+                setTimeout(() => {
+                    setModalBtnHide(false);
+                    history.push('/main');
+                }, 500);
+            }
+            else {
+                
+            }
+        }
     }
 
     /**
@@ -207,7 +239,7 @@ export default function SetDeviceWifi () {
     return(
         <div className="rootWrap">
             <LoadingAnimation bIsRender={bRenderLoading}></LoadingAnimation>
-            <Modal open={modalOpen} close={closeModal} header={modalHeader} confirm="확인" 
+            <Modal open={modalOpen} close={closeModal} header={modalHeader} hideBtn={modalBtnHide} confirm="확인"
                     isInput={modalInput} inputType="password" placeholderStr="Password...">
                 {modalBodyStr}
             </Modal>
