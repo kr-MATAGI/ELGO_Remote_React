@@ -185,7 +185,7 @@ export default function SetDeviceWifi () {
         }, 500);   
     }
 
-    function WifiLabel( {ssid, freq, signal, enc} ) {
+    function WifiLabel( {ssid, freq, signal, enc} ) {``
         // wifi icon
         const newSignal = signal * -1;
         let wifiDegree;
@@ -228,10 +228,6 @@ export default function SetDeviceWifi () {
     /**
      * @brief   Enter Wifi password and verify
      */
-    const enterWifiPassword = () => {
-
-    }
-
     useEffect(() => {
         updateAcessibleWifiList();
     }, [])
