@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import {v4 as uuidv4} from 'uuid';
 
 /**
  * @brief   Get JWT token and acess user login server
@@ -9,8 +8,7 @@ import {v4 as uuidv4} from 'uuid';
 const EX_HOST = 'https://demo.elgo.co.kr'
 const onAccessExternalWAS = () => {
     // get uuid
-    const uuid = uuidv4();
-    console.log(uuid);
+    
     // get os
 
     // get token from server using axios (http)
