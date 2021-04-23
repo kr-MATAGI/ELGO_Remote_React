@@ -9,7 +9,7 @@ import '../../css/Modal.css';
 var extInputValue = '';
 export function Modal ( props ) {
     // props
-    const { open, close, header, confirm, hideBtn, isInput, inputType, placeholderStr } = props;
+    const { open, cancel, close, header, confirm, hideBtn, isInput, inputType, placeholderStr } = props;
     
     // <input />
     const [inputStr, setInputStr] = useState('');
@@ -35,7 +35,6 @@ export function Modal ( props ) {
                 <section>
                     <header>
                         {header}
-                        <button className="close" onClick={close}></button>
                     </header>
                     <main>
                         {props.children}
@@ -44,12 +43,14 @@ export function Modal ( props ) {
                                 if(true === isInput) {
                                     return (<p><input type={inputType} className="modalInput"
                                                     placeholder={placeholderStr}
-                                                    value={inputStr} onChange={onInputChange}/></p>)
+                                                    value={inputStr || ''} onChange={onInputChange}/></p>)
                                 }
                             })()
                         }
                     </main>
                     <footer>
+                        { hideBtn ? null : <button className="cancel" onClick={cancel}>취소</button>}
+                        {" "}
                         { hideBtn ? null : <button className="close" onClick={close} > {confirm} </button>}
                     </footer>
                 </section>

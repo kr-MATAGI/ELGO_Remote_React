@@ -66,8 +66,6 @@ export default function DeviceLogin() {
      * @brief   Confirm button action
      */
     const deviceLoginVerify = () => {
-        console.log('deviceLoginVerify');
-
         if('' === deviceId || '' === devicePw) {
             setModalStr('아이디 혹은 비밀번호를 입력해주세요.');
             openModal();

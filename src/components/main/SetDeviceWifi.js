@@ -57,8 +57,26 @@ export default function SetDeviceWifi () {
     const [modalHeader, setModalHeader] = useState('');
     const [modalBtnHide, setModalBtnHide] = useState(false);
     const [modalBodyStr, setModalBodyStr] = useState('');
+    const [modalConfirmStr, setModalConfirmStr] = useState('확인');
     const [modalOpen, setModalOpen] = useState(false);
     const [modalInput, setModalInput] = useState(true);
+
+    /** @brief  Modeal String Change */
+    const changeModalString = (header, body, confirm) => {
+        if(null !== header) {
+            setModalHeader(header);
+        }
+
+        if(null !== body) {
+            setModalBodyStr(body)
+        }
+
+        if(null !== confirm) {
+            setModalConfirmStr(confirm);
+        }
+    }
+
+    /** @brief  Open Modal */
     const openModal = (ssid) => {
         const findWifi = wifiInfoList.find((element) => {
             return element.ssid === ssid;
@@ -70,28 +88,30 @@ export default function SetDeviceWifi () {
         setSelectedWifi(wifi);
         
         let headerStr = '';
+        let bodyStr  = null;
         if(true === wifi.enc) {
             headerStr = ssid;
-            headerStr += " 의 비밀번호를 입력해주세요.";
+            headerStr += ' 의 비밀번호를 입력해주세요.';
+            bodyStr = '';
+            setModalInput(true);
         }
         else {
             headerStr = ssid;
-            headerStr += " 를 선택하셨습니다.";
-
-            setModalInput(false);
-            
-            let bodyStr = "연결을 계속하시겠습니까?"
-            setModalBodyStr(bodyStr);
-        }
+            headerStr += ' 를 선택하셨습니다.';
         
-        setModalHeader(headerStr);
+            bodyStr = networkMessage.warningOpenNetwork;
+            setModalInput(false);
+        }
+        changeModalString(headerStr, bodyStr, null)
         setModalOpen(true);
     }
+
+    /** @brief  Close Modal */
     const closeModal = () => {
         setLoadingStatus(true);
         setModalBtnHide(true);
 
-        let headerStr = selectedWifi.ssid + " 에 연결 합니다.";
+        let headerStr = selectedWifi.ssid + ' 에 연결 합니다.';
         let password = '';
         if(true === selectedWifi.enc) {
             password = getModalInputValue();
@@ -111,6 +131,30 @@ export default function SetDeviceWifi () {
             }
         }
         sendMessage(JSON.stringify(connectWifiJson));        
+    }
+
+    /** @brief  Cancel Modal */
+    const onCanelModal = () => {
+        setModalOpen(false);
+        setModalConfirmStr('확인');
+        setModalInputValue('');
+        setModalInput(false);
+    }
+
+    /** @brief  Retry Modal */
+    const onRetryModal = () => {
+        let headerStr = selectedWifi.ssid + ' 에 연결 실패하였습니다.'
+        let bodyStr = null;
+
+        if(true === selectedWifi.enc) {
+            bodyStr = '비밀번호를 다시 입력해주세요.';
+            setModalInput(true);
+        }
+        else {
+            bodyStr = networkMessage.warningOpenNetwork;
+        }
+
+        changeModalString(headerStr, bodyStr, '재시도');
     }
 
     /**
@@ -154,21 +198,31 @@ export default function SetDeviceWifi () {
             }
         }
         else if(ACTION.CONNECT_WIFI === response.action) {
-            setModalOpen(false);
             setLoadingStatus(false);
 
+            let bodyStr = null;
+            let confirmStr = null;
             if(true === response.result) {
-                let bodyStr = "네트워크 연결에 성공하였습니다.";
-                setModalBodyStr(bodyStr);
+                bodyStr = networkMessage.ConnectSuccess;
 
                 setTimeout(() => {
-                    setModalBtnHide(false);
+                    setModalOpen(false);
+                    confirmStr = '확인';
+                    
                     history.push('/main');
-                }, 500);
+                }, 1000);
+
+                changeModalString(null, bodyStr, confirmStr);
             }
             else {
-                
+                bodyStr = networkMessage.ConnectFailed;
+                setModalBtnHide(false);
+                onRetryModal();
             }
+        }
+        else{
+            console.log('Error - Unkown Action');
+            console.log(response);
         }
     }
 
@@ -185,7 +239,7 @@ export default function SetDeviceWifi () {
         }, 500);   
     }
 
-    function WifiLabel( {ssid, freq, signal, enc} ) {``
+    function WifiLabel( {ssid, freq, signal, enc} ) {
         // wifi icon
         const newSignal = signal * -1;
         let wifiDegree;
@@ -235,7 +289,8 @@ export default function SetDeviceWifi () {
     return(
         <div className="rootWrap">
             <LoadingAnimation bIsRender={bRenderLoading}></LoadingAnimation>
-            <Modal open={modalOpen} close={closeModal} header={modalHeader} hideBtn={modalBtnHide} confirm="확인"
+            <Modal open={modalOpen} close={closeModal} header={modalHeader} hideBtn={modalBtnHide} 
+                    confirm={modalConfirmStr} cancel={onCanelModal}
                     isInput={modalInput} inputType="password" placeholderStr="Password...">
                 {modalBodyStr}
             </Modal>
