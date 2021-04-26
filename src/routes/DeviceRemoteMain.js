@@ -1,28 +1,79 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-
-/**
- * @brief   Get JWT token and acess user login server
- */
-const EX_HOST = 'https://demo.elgo.co.kr'
-const onAccessExternalWAS = () => {
-    // get uuid
-    
-    // get os
-
-    // get token from server using axios (http)
-
-    // link to external webserver with jwt
-}
-
+import {ACTION} from '../components/definitions/commDefinition.js';
+import {sendMessage, websocket} from '../utils/websocket/RemoteWebsocket.js';
+import LoadingAnimation from '../animations/Loading.js';
 
 /**
  * @brief   Main page
  */
 function DeviceRemoteMain() {
+    /**
+     * @brief   Loading Animation
+     */
+    const [showLoadingAni, setShowLoadingAni] = useState(false);
+
+    /**
+     * @brief   Websocket onmessage override
+     */
+    const EXT_HOST = 'https://demo.elgo.co.kr/client/jwt/user'
+    websocket.onmessage = (event) =>{
+        setShowLoadingAni(false);
+        
+        let response = JSON.parse(event.data);
+        console.log(response);
+
+        if(ACTION.USER_LOGIN === response.action) {
+            if(true === response.result) {
+                // get token from server using axios
+                let body = {
+                    os: response.os,
+                    uuid: response.udid // plz see a uuid, udid defintion
+                }
+                console.log(body);
+
+                axios.post(EXT_HOST, body).then((axiosResponse) => {
+                    console.log(axiosResponse);
+
+                    let newToken = axiosResponse.data.newToken;
+                    // link to external webserver with jwt
+                    let loginPageUrl = 'https://demo.elgo.co.kr/client/login?token=';
+                    loginPageUrl += newToken;
+                    console.log('logingPageUrl', loginPageUrl);
+                   
+                    // access external web
+                    window.location.assign(loginPageUrl);
+                }).catch((error) => {
+                    console.log(error);
+                });
+            }
+            else {
+                
+            }
+        }
+        else {
+            console.log('Unkown Action -', response.action);
+        }
+    }
+
+    /**
+     * @brief   Get JWT token and acess user login server
+     */
+    const onAccessExternalWAS = () => {
+        setShowLoadingAni(true);
+
+        // Get os, udid(uuid)
+        let userLoginJson = JSON.stringify({
+            action: ACTION.USER_LOGIN
+        });
+        sendMessage(userLoginJson);
+    }
+
     return(
         <div className="rootWrap">
+            <LoadingAnimation bIsRender={showLoadingAni}></LoadingAnimation>
+
             <div className="logoWrap">
                 <h1>LOGO</h1>
             </div>
