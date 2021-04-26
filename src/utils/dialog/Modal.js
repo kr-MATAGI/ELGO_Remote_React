@@ -12,7 +12,6 @@ export function Modal ( props ) {
     const { open, cancel, close, header, confirm, hideBtn, isInput, inputType, placeholderStr } = props;
     
     // useState
-    const [isOpen, setIsOpen] = useState(open);
     const [inputStr, setInputStr] = useState('');
     const onInputChange = (element) =>{
         const value = element.target.value;

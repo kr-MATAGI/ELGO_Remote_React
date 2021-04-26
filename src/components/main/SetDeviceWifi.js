@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import LoadingAnimation from '../../animations/Loading.js'
-import {sendMessage, websocket} from '../../utils/websocket/RemoteWebsocket.js';
-import {ACTION} from '../definitions/commDefinition.js';
+import { sendMessage, websocket, URL } from '../../utils/websocket/RemoteWebsocket.js';
+import { ACTION } from '../definitions/commDefinition.js';
 import { Modal, getModalInputValue, setModalInputValue } from '../../utils/dialog/Modal.js';
 
 import { ReactComponent as WifiDeg4 } from '../../img/wifi_full.svg';
@@ -21,7 +21,7 @@ const networkMessage = {
     Connecting: '무선 네트워크를 연결 중 입니다. (최대 1분)',
     ConnectSuccess: '무선 네트워크에 연결되었습니다.',
     ConnectFailed: '무선 네트워크 연결이 실패했습니다.',
-    warningOpenNetwork: '개방향 네트워크 사용은 권장하지 않습니다. 계속하시겠습니까?'
+    warningOpenNetwork: '개방형 네트워크 사용은 권장하지 않습니다. 계속하시겠습니까?'
 }
 
 export default function SetDeviceWifi () {
@@ -29,6 +29,7 @@ export default function SetDeviceWifi () {
      * @brief   History
      */
     const history = useHistory();
+    const [isPageRefresh, setPageRefresh] = useState(false);
 
     /**
      * @brief   Loading Animation State
@@ -107,6 +108,11 @@ export default function SetDeviceWifi () {
     }
 
     /** @brief  Close Modal */
+    const reConnWebsocket = setInterval(() => {
+        if(true === isPageRefresh) {
+            window.location.replace('/wifi');
+        }
+    }, 2000)
     const closeModal = () => {
         setLoadingStatus(true);
         setModalBtnHide(true);
@@ -130,7 +136,22 @@ export default function SetDeviceWifi () {
                 encryption: selectedWifi.enc 
             }
         }
-        sendMessage(JSON.stringify(connectWifiJson));        
+        sendMessage(JSON.stringify(connectWifiJson));
+        
+        // Re-connect websocket
+        websocket.close();
+        setPageRefresh(true);
+    }
+
+    /** @brief  Websocket onopen/onclose override */
+    websocket.onopen = () => {
+        console.log("WebSocket Re-Opened !");
+        
+        clearInterval(reConnWebsocket);
+        setPageRefresh(false);
+    }
+    websocket.onclose = () => {
+        console.log("Websocket Close by connect wifi");
     }
 
     /** @brief  Cancel Modal */
@@ -205,10 +226,11 @@ export default function SetDeviceWifi () {
             if(true === response.result) {
                 bodyStr = networkMessage.ConnectSuccess;
 
+                
                 setTimeout(() => {
                     setModalOpen(false);
                     confirmStr = '확인';
-                    
+
                     history.push('/main');
                 }, 1000);
 
@@ -229,14 +251,17 @@ export default function SetDeviceWifi () {
     /**
      * @brief   Update Wifi List
      */
-    const updateAcessibleWifiList = () => {
-        setLoadingStatus(true);
-        setTimeout(() => {
-            let requestLoadWifiList = JSON.stringify({
-                action: ACTION.UPDATE_WIFI_LIST,
-            });
-            sendMessage(requestLoadWifiList);
-        }, 500);   
+    const updateAcessibleWifiList =() => {
+        if(false === isPageRefresh) {
+            setLoadingStatus(true);
+            
+            setTimeout(() => {
+                let requestLoadWifiList = JSON.stringify({
+                    action: ACTION.UPDATE_WIFI_LIST,
+                });
+                sendMessage(requestLoadWifiList);
+            }, 500);   
+        }
     }
 
     function WifiLabel( {ssid, freq, signal, enc} ) {

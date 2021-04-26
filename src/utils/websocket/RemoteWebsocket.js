@@ -1,9 +1,9 @@
-import { useEffect} from "react";
+import { useEffect } from "react";
 
 /**
- * Websocket
+ * @brief   Websocket
  */
-const URL = "ws://192.168.0.92:9412";
+export const URL = "ws://elgo-remote.com:9412";
 export const websocket = new WebSocket(URL);
 export default function RemoteWebsocket() {
     useEffect(() => {    
