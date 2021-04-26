@@ -1,8 +1,8 @@
 import react, {useState} from 'react';
 import LoadingAnimation from '../../animations/Loading.js'
-import {Modal} from '../../utils/dialog/Modal.js';
-import {sendMessage, websocket} from '../../utils/websocket/RemoteWebsocket.js';
-import {ACTION} from '../definitions/commDefinition.js';
+import { Modal } from '../../utils/dialog/Modal.js';
+import { sendMessage, websocket } from '../../utils/websocket/RemoteWebsocket.js';
+import { ACTION } from '../definitions/commDefinition.js';
 import { useHistory } from 'react-router-dom';
 
 /**

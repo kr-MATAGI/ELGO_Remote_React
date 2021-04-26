@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import {ACTION} from '../components/definitions/commDefinition.js';
-import {sendMessage, websocket} from '../utils/websocket/RemoteWebsocket.js';
+import { ACTION } from '../components/definitions/commDefinition.js';
+import { sendMessage, websocket } from '../utils/websocket/RemoteWebsocket.js';
 import LoadingAnimation from '../animations/Loading.js';
+import { Modal } from '../utils/dialog/Modal.js';
 
 /**
  * @brief   Main page
@@ -13,6 +14,23 @@ function DeviceRemoteMain() {
      * @brief   Loading Animation
      */
     const [showLoadingAni, setShowLoadingAni] = useState(false);
+
+    /**
+     * @brief   Modal
+     */
+    const [isModalOpen, setModalOpen] = useState(false);
+    const [modalHeader, setModalHeader] = useState('');
+    const [modalBody, setModalBody] = useState('');
+    const onModalClose = () => {
+        setModalOpen(false)
+        setModalHeader('');
+        setModalBody('');
+    }
+    const onModalOpenControl = (isOpen, header, body) => {
+        setModalOpen(isOpen);
+        setModalHeader(header);
+        setModalBody(body);
+    }
 
     /**
      * @brief   Websocket onmessage override
@@ -46,10 +64,16 @@ function DeviceRemoteMain() {
                     window.location.assign(loginPageUrl);
                 }).catch((error) => {
                     console.log(error);
+
+                    let headerStr = '접속 실패';
+                    let bodyStr = '서버에 접속 실패 하였습니다.';
+                    onModalOpenControl(true, headerStr, bodyStr);
                 });
             }
             else {
-                
+                let headerStr = '접속 실패';
+                let bodyStr = '기기와 통신에 실패하였습니다.';
+                onModalOpenControl(true, headerStr, bodyStr);
             }
         }
         else {
@@ -73,6 +97,10 @@ function DeviceRemoteMain() {
     return(
         <div className="rootWrap">
             <LoadingAnimation bIsRender={showLoadingAni}></LoadingAnimation>
+            <Modal open={isModalOpen} cancel={onModalClose} 
+                    close={onModalClose} header={modalHeader} confirm="확인">
+                {modalBody}
+            </Modal>
 
             <div className="logoWrap">
                 <h1>LOGO</h1>
