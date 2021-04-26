@@ -39,6 +39,10 @@ function ChangeDevicePW () {
             setInputs('','','');
         }
     }
+    const cancelModal = () => {
+        setModalOpen(false);
+        setInputs('','','');
+    }
 
     /**
      * @brief   Websocket onmessage override
@@ -109,7 +113,7 @@ function ChangeDevicePW () {
     return (
         <div className="rootWrap">
             <LoadingAnimation bIsRender={bRenderLoading}></LoadingAnimation>
-            <Modal open={modalOpen} close={closeModal} header="비밀번호 변경" confirm="확인">
+            <Modal open={modalOpen} cancel={cancelModal} lose={closeModal} header="비밀번호 변경" confirm="확인">
                 {modalStatus[1]}
             </Modal>
 

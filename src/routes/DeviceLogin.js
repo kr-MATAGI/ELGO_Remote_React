@@ -66,7 +66,8 @@ export default function DeviceLogin() {
      * @brief   Confirm button action
      */
     const deviceLoginVerify = () => {
-        if('' === deviceId || '' === devicePw) {
+        if( ('' === deviceId || '' === devicePw) ||
+            (undefined === deviceId || undefined === devicePw) ) {
             setModalStr('아이디 혹은 비밀번호를 입력해주세요.');
             openModal();
         }       
@@ -89,7 +90,7 @@ export default function DeviceLogin() {
     return (
         <div className="deviceLogin">
             <LoadingAnimation bIsRender={bRenderLoading}></LoadingAnimation>
-            <Modal open={modalOpen} close={closeModal} header="로그인" confirm="확인">
+            <Modal open={modalOpen} cancel={closeModal} close={closeModal} header="로그인" confirm="확인">
                 {modalStr}
             </Modal>
 

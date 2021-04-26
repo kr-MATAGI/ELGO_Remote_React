@@ -11,7 +11,8 @@ export function Modal ( props ) {
     // props
     const { open, cancel, close, header, confirm, hideBtn, isInput, inputType, placeholderStr } = props;
     
-    // <input />
+    // useState
+    const [isOpen, setIsOpen] = useState(open);
     const [inputStr, setInputStr] = useState('');
     const onInputChange = (element) =>{
         const value = element.target.value;
@@ -51,7 +52,7 @@ export function Modal ( props ) {
                     <footer>
                         { hideBtn ? null : <button className="cancel" onClick={cancel}>취소</button>}
                         {" "}
-                        { hideBtn ? null : <button className="close" onClick={close} > {confirm} </button>}
+                        { hideBtn ? null : <button className="close" onClick={close}>{confirm}</button>}
                     </footer>
                 </section>
             ) : null }
