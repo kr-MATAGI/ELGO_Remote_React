@@ -226,7 +226,6 @@ export default function SetDeviceWifi () {
             if(true === response.result) {
                 bodyStr = networkMessage.ConnectSuccess;
 
-                
                 setTimeout(() => {
                     setModalOpen(false);
                     confirmStr = '확인';
