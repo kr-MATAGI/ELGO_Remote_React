@@ -108,7 +108,7 @@ export default function SetDeviceWifi () {
     }
 
     /** @brief  Close Modal */
-    const reConnWebsocket = setInterval(() => {
+    const reConnWebsocket = setTimeout(() => {
         if(true === isPageRefresh) {
             window.location.replace('/wifi');
         }
