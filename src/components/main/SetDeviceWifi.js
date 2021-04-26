@@ -112,7 +112,7 @@ export default function SetDeviceWifi () {
         if(true === isPageRefresh) {
             window.location.replace('/wifi');
         }
-    }, 2000)
+    }, 5000)
     const closeModal = () => {
         setLoadingStatus(true);
         setModalBtnHide(true);
