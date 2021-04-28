@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import LoadingAnimation from '../../animations/Loading.js'
-import { sendMessage, websocket, URL } from '../../utils/websocket/RemoteWebsocket.js';
+import { websocket, sendMessage } from '../../utils/websocket/RemoteWebsocket.js';
 import { ACTION } from '../definitions/commDefinition.js';
 import { Modal, getModalInputValue, setModalInputValue } from '../../utils/dialog/Modal.js';
 
@@ -24,18 +23,18 @@ const networkMessage = {
     warningOpenNetwork: '개방형 네트워크 사용은 권장하지 않습니다. 계속하시겠습니까?'
 }
 
-export default function SetDeviceWifi () {
-    /**
-     * @brief   History
-     */
-    const history = useHistory();
-    const [isPageRefresh, setPageRefresh] = useState(false);
+/**
+ * @brief   Timeout define
+ */
+const timeout = {
+    TO_MAIN_TIMEOUT: 1000,
+}
 
+export default function SetDeviceWifi () {
     /**
      * @brief   Loading Animation State
      */
     const [loadingStatus, setLoadingStatus] = useState(false);
-    const bRenderLoading = loadingStatus;
 
     /**
      * @brief   Wifi Info
@@ -55,11 +54,11 @@ export default function SetDeviceWifi () {
     /**
      * @brief   Dialog (Modal)
      */
-    const [modalHeader, setModalHeader] = useState('');
-    const [modalBtnHide, setModalBtnHide] = useState(false);
-    const [modalBodyStr, setModalBodyStr] = useState('');
-    const [modalConfirmStr, setModalConfirmStr] = useState('확인');
     const [modalOpen, setModalOpen] = useState(false);
+    const [modalHeader, setModalHeader] = useState('') 
+    const [modalBodyStr, setModalBodyStr] = useState('');
+    const [modalBtnHide, setModalBtnHide] = useState(false);
+    const [modalConfirmStr, setModalConfirmStr] = useState('확인');
     const [modalInput, setModalInput] = useState(true);
 
     /** @brief  Modeal String Change */
@@ -108,11 +107,6 @@ export default function SetDeviceWifi () {
     }
 
     /** @brief  Close Modal */
-    const reConnWebsocket = setTimeout(() => {
-        if(true === isPageRefresh) {
-            window.location.replace('/wifi');
-        }
-    }, 5000)
     const closeModal = () => {
         setLoadingStatus(true);
         setModalBtnHide(true);
@@ -136,22 +130,8 @@ export default function SetDeviceWifi () {
                 encryption: selectedWifi.enc 
             }
         }
-        sendMessage(JSON.stringify(connectWifiJson));
-        
-        // Re-connect websocket
-        websocket.close();
-        setPageRefresh(true);
-    }
 
-    /** @brief  Websocket onopen/onclose override */
-    websocket.onopen = () => {
-        console.log("WebSocket Re-Opened !");
-        
-        clearInterval(reConnWebsocket);
-        setPageRefresh(false);
-    }
-    websocket.onclose = () => {
-        console.log("Websocket Close by connect wifi");
+        sendMessage(JSON.stringify(connectWifiJson));
     }
 
     /** @brief  Cancel Modal */
@@ -222,28 +202,14 @@ export default function SetDeviceWifi () {
             setLoadingStatus(false);
 
             let bodyStr = null;
-            let confirmStr = null;
-            if(true === response.result) {
-                bodyStr = networkMessage.ConnectSuccess;
-
-                setTimeout(() => {
-                    setModalOpen(false);
-                    confirmStr = '확인';
-
-                    history.push('/main');
-                }, 1000);
-
-                changeModalString(null, bodyStr, confirmStr);
-            }
-            else {
+            if(false === response.result) {
                 bodyStr = networkMessage.ConnectFailed;
                 setModalBtnHide(false);
                 onRetryModal();
             }
         }
         else{
-            console.log('Error - Unkown Action');
-            console.log(response);
+            console.log('Error - Unkown Action', response);
         }
     }
 
@@ -251,16 +217,14 @@ export default function SetDeviceWifi () {
      * @brief   Update Wifi List
      */
     const updateAcessibleWifiList =() => {
-        if(false === isPageRefresh) {
-            setLoadingStatus(true);
-            
-            setTimeout(() => {
-                let requestLoadWifiList = JSON.stringify({
-                    action: ACTION.UPDATE_WIFI_LIST,
-                });
-                sendMessage(requestLoadWifiList);
-            }, 500);   
-        }
+        setLoadingStatus(true);
+        setTimeout(() => {
+            let requestLoadWifiList = JSON.stringify({
+                action: ACTION.UPDATE_WIFI_LIST,
+            });
+
+            sendMessage(requestLoadWifiList);
+        }, 500);   
     }
 
     function WifiLabel( {ssid, freq, signal, enc} ) {
@@ -304,7 +268,7 @@ export default function SetDeviceWifi () {
     }
 
     /**
-     * @brief   Enter Wifi password and verify
+     * @brief   useEffect()
      */
     useEffect(() => {
         updateAcessibleWifiList();
@@ -312,7 +276,7 @@ export default function SetDeviceWifi () {
 
     return(
         <div className="rootWrap">
-            <LoadingAnimation bIsRender={bRenderLoading}></LoadingAnimation>
+            <LoadingAnimation bIsRender={loadingStatus}></LoadingAnimation>
             <Modal open={modalOpen} close={closeModal} header={modalHeader} hideBtn={modalBtnHide} 
                     confirm={modalConfirmStr} cancel={onCanelModal}
                     isInput={modalInput} inputType="password" placeholderStr="Password...">

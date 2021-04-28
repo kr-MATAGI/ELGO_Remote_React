@@ -3,7 +3,16 @@ import { useEffect } from "react";
 /**
  * @brief   Websocket
  */
-export const URL = "ws://elgo-remote.com:9412";
+
+// Get ELGO_Client's local IP
+const accessURL = (window.location.href).split("http://")[1];
+const accessIP = accessURL.split(":")[0];
+
+var accessWS = 'ws://';
+accessWS += accessIP;
+accessWS += ':9412';
+
+const URL = accessWS;
 export const websocket = new WebSocket(URL);
 export default function RemoteWebsocket() {
     useEffect(() => {    
