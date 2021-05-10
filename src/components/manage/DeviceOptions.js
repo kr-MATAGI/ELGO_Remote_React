@@ -1,4 +1,4 @@
-import react, { useState } from 'react';
+import react, { useEffect, useState } from 'react';
 import {ACTION} from '../definitions/commDefinition.js';
 import LoadingAnimation from '../../animations/Loading.js'
 import {sendMessage, websocket} from '../../utils/websocket/RemoteWebsocket.js';
@@ -12,76 +12,67 @@ function DeviceOptions() {
 
     /**
      * @brief   Options States
-     * @note    Display ON/OFF - ON : true, OFF : false (default : true)
+     * @note    Sleep - ON : true, OFF : false (default : false)
      *          Mute - ON : true, OFF : false (default : false)
      *          Pause - ON : true, OFF : false (default : fasle)
      */
-    const [optionsState, setOptionsState] = useState({
-        displayOnOff: true,
-        deviceMute: false,
-        contentPause: false
-    });
-    const {displayOnOff, deviceMute, contentPause} = optionsState;
+    const [displaySleep, setDisplaySleep] = useState(false);
+    const [deviceMute, setDeviceMute] = useState(false);
+    const [contentPause, setContentPause] = useState(false);
 
     // button string (value)
-    const [optionsStateStr, setOptionsStateStr] = useState({
-        displayOnOffStr:'Display OFF',
-        deviceMuteStr: 'Mute OFF',
-        contentPauseStr: 'Pause'
-    });
-    const {displayOnOffStr, deviceMuteStr, contentPauseStr} = optionsStateStr;
-    const nextStatusHandler = (name, value) => {
-        setOptionsStateStr({
-            ...optionsStateStr,
-            [name]: value
-        });
-    }
+    const [displaySleepStr, setSleepStr] = useState('Display OFF');
+    const [deviceMuteStr, setMuteStr] = useState('Mute OFF');
+    const [contentPauseStr, setPauseStr] = useState('Pause');
+
     const changeDeviceOptions = (element) => {
         setLoadingStatus(true);
         setTimeout(() => {
             const {value, name} = element.target;
+            
+            let sendValue = [displaySleep, deviceMute, contentPause];
             // Chnage Values
-            let changeValue = true;
-            let nextStr;
-            if ('displayOnOff' === name) {
-                changeValue = (true === displayOnOff ? false : true);
-                if (true === changeValue) {
-                    nextStr = 'Display OFF';
+            if ('displaySleep' === name) {
+                if(false === displaySleep) {
+                    sendValue[0] = true;
+                    setDisplaySleep(true);
+                    setSleepStr('Display ON');
                 }
                 else {
-                    nextStr = 'Display ON';
+                    sendValue[0] = false;
+                    setDisplaySleep(false);
+                    setSleepStr('Display OFF');
                 }
             }
             else if ('deviceMute' === name) {
-                changeValue = (true === deviceMute ? false : true);
-                if (true === changeValue) {
-                    nextStr = 'Mute ON';
+                if(false === deviceMute) {
+                    sendValue[1] = true;
+                    setDeviceMute(true);
+                    setMuteStr('Mute ON');
                 }
                 else {
-                    nextStr = 'Mute OFF';
+                    sendValue[1] = false;
+                    setDeviceMute(false);
+                    setMuteStr('Mute OFF');
                 }
             }
             else if ('contentPause' === name) {
-                changeValue = (true === contentPause ? false : true);
-                if (true === changeValue) {
-                    nextStr = 'Play'
+                if(false === contentPause) {
+                    sendValue[2] = true;
+                    setContentPause(true);
+                    setPauseStr("Play");
                 }
                 else {
-                    nextStr = 'Pause';
+                    sendValue[2] = false;
+                    setContentPause(false);
+                    setPauseStr("Pause");
                 }
             }
             else {
                 console.log('Error - Unkwon button name');
             }
             
-            // Call setter
-            const strName = name + 'Str'
-            setOptionsState({
-                ...optionsState,
-                [name]: changeValue
-            });
-            nextStatusHandler(strName, nextStr);
-            sendChangedOptions();
+            sendChangedOptions(sendValue);
         }, 300);
         
     }
@@ -89,13 +80,13 @@ function DeviceOptions() {
     /**
      * @brief   Send data to elgo_control
      */
-    const sendChangedOptions = () => {
+    const sendChangedOptions = (sendValue) => {
         const jsonRequest = JSON.stringify({
             action: ACTION.DEVICE_OPTIONS,
             deviceOptions: {
-                displayOnOff: displayOnOff,
-                deviceMute: deviceMute,
-                contentPause: contentPause
+                displayOnOff: sendValue[0],
+                deviceMute: sendValue[1],
+                contentPause: sendValue[2]
             }
         })
         sendMessage(jsonRequest);
@@ -117,8 +108,8 @@ function DeviceOptions() {
                 <h1>Device Options</h1>
             </div>
             <div className="btnWrap">
-                <input type="button" name="displayOnOff" 
-                        value={displayOnOffStr || ''} onClick={changeDeviceOptions} />
+                <input type="button" name="displaySleep" 
+                        value={displaySleepStr || ''} onClick={changeDeviceOptions} />
                 <input type="button" name="deviceMute"
                         value={deviceMuteStr || ''} onClick={changeDeviceOptions} />
                 <input type="button" name="contentPause"
