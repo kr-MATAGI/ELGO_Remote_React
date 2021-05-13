@@ -114,7 +114,7 @@ function ChangeDevicePW () {
     return (
         <div className="rootWrap">
             <LoadingAnimation bIsRender={bRenderLoading}></LoadingAnimation>
-            <Modal open={modalOpen} cancel={cancelModal} lose={closeModal} header="비밀번호 변경" confirm="확인">
+            <Modal open={modalOpen} cancel={cancelModal} close={closeModal} header="비밀번호 변경" confirm="확인">
                 {modalStatus[1]}
             </Modal>
 
@@ -131,9 +131,9 @@ function ChangeDevicePW () {
                     </div>
                     <div className="pwInp">
                         <input type="password" name="originPw" 
-                        value={originPw || ''}
-                        onChange={onValueChange}
-                        placeholder="현재 비밀번호"/>
+                            value={originPw || ''}
+                            onChange={onValueChange}
+                            placeholder="현재 비밀번호"/>
 
                         <input type="password" name="newPw" 
                             value={newPw || ''}
