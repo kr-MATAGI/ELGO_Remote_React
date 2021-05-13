@@ -5,6 +5,7 @@ import { ACTION } from '../components/definitions/commDefinition.js';
 import { sendMessage, websocket } from '../utils/websocket/RemoteWebsocket.js';
 import LoadingAnimation from '../animations/Loading.js';
 import { Modal } from '../utils/dialog/Modal.js';
+import '../css/DeviceRemoteMain.css';
 
 /**
  * @brief   Main page
@@ -103,7 +104,7 @@ function DeviceRemoteMain() {
             </Modal>
 
             <div className="logoWrap">
-                <h1>LOGO</h1>
+                <div className="logoImg"></div>
             </div>
             
             <div className="btnWrap">

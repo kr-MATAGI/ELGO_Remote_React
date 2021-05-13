@@ -1,12 +1,12 @@
 *{margin: 0; padding: 0;}
 
-.deviceLogin{
+.rootWrap{
     width: 100%;
     height: 100vh;
     display: flex;
 }
 
-.logo{
+.logoWrap{
     width: 320px;
     height: 100%;
     background-color: #fff;
@@ -23,7 +23,7 @@
     background-position: center;
 }
 
-.loginWrapper{
+.btnWrap{
     width: calc(100% - 320px);
     height: 100%;
     background-color: #F1F1F1;
@@ -31,40 +31,58 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
 }
 
-.loginWrapper>input{
-    width: 280px;
-    height: 30px;
-    padding: 10px;
-    border: 0;
-    margin-bottom: 20px;
+.btnWrap>p{
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 50px;
 }
 
-.loginWrapper>button{
+.btnWrap>button,.btnWrap>a>button,.btnWrap input{
     width: 300px;
     height: 50px;
+    border-radius: 25px;
+    border: 0;
     background-color: #112362;
     color: #fff;
-    text-align: center;
-    border: 0;
-    border-radius: 25px;
-    margin-top: 30px;
+    margin-bottom: 20px;
     cursor: pointer;
 }
 
-.loginWrapper>button:active{
+.btnWrap button:active,.btnWrap input:active{
     background-color: #FFE855;
 }
 
+.buttonWrap{
+    width: 260px;
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 50px;
+}
+
+.buttonWrap button{
+    width: 45%;
+    height: 100%;
+    background-color: #112362;
+    border-radius: 25px;
+    border: 0;
+    color: #ffffff;
+    font-size: 16px;
+}
+
+.exampleIconWrap{
+    width: 200px;
+}
+
 @media all and (max-width: 960px){
-    .deviceLogin{
+    .rootWrap{
         display: flex;
         flex-direction: column;
     }
 
-    .logo{
+    .logoWrap{
         width: 100%;
         height: 120px;
     }
@@ -74,20 +92,27 @@
         height: 60px;
     }
 
-    .loginWrapper{
+    .btnWrap{
         width: 100%;
-        height: calc(100vh - 120px);
+        height: calc(100% - 120px);
     }
 
-    .loginWrapper>button{
+    .btnWrap>button,.btnWrap>a{
         max-width: 300px;
         width: 80%;
     }
 
-    .loginWrapper>input{
-        max-width: 280px;
-        width: calc(80% - 20px);
-        
+    .btnWrap>a>button{
+        width: 100%;
+    }
+
+    .btnWrap input{
+        width: 240px;
+    }
+
+    .buttonWrap{
+        max-width: 260px;
+        width: 80%;
     }
 
 }

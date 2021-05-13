@@ -104,10 +104,13 @@ function DeviceOptions() {
     return(
         <div className="rootWrap">
             <LoadingAnimation bIsRender={bRenderLoading}></LoadingAnimation>
-            <div className="titleWrap">
-                <h1>Device Options</h1>
+
+            <div className="logoWrap">
+                <div className="logoImg"></div>
             </div>
             <div className="btnWrap">
+                    <p>Device Options</p>
+
                 <input type="button" name="displaySleep" 
                         value={displaySleepStr || ''} onClick={changeDeviceOptions} />
                 <input type="button" name="deviceMute"

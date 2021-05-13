@@ -4,6 +4,7 @@ import { Modal } from '../../utils/dialog/Modal.js';
 import { sendMessage, websocket } from '../../utils/websocket/RemoteWebsocket.js';
 import { ACTION } from '../definitions/commDefinition.js';
 import { useHistory } from 'react-router-dom';
+import '../../css/ManageDevice.css';
 
 /**
  * @brief   Change Device Password
@@ -117,25 +118,34 @@ function ChangeDevicePW () {
                 {modalStatus[1]}
             </Modal>
 
-            <div className="titleWrap">
-                <p>ELGO_REMOTE 접속 비밀번호 변경</p>
+            <div className="logoWrap">
+                <div className="logoImg"></div>
             </div>
 
             <div className="pwInputWrap">
-                <input type="password" name="originPw" 
-                    value={originPw || ''}
-                    onChange={onValueChange}
-                    placeholder="현재 비밀번호를 입력해주세요."/>
+                <p>ELGO_REMOTE 접속 비밀번호 변경</p>
 
-                <input type="password" name="newPw" 
-                    value={newPw || ''}
-                    onChange={onValueChange}
-                    placeholder="변경할 비밀번호를 입력해주세요."/>
+                <div className="pwInpWrap">
+                    <div className="pwInpImgWrap">
+                        <div className="pwInpImg"></div>
+                    </div>
+                    <div className="pwInp">
+                        <input type="password" name="originPw" 
+                        value={originPw || ''}
+                        onChange={onValueChange}
+                        placeholder="현재 비밀번호"/>
 
-                <input type="password" name="confirmPw" 
-                    value={confirmPw || ''}
-                    onChange={onValueChange}
-                    placeholder="변경할 비밀번호를 한번 더 입력해주세요."/>
+                        <input type="password" name="newPw" 
+                            value={newPw || ''}
+                            onChange={onValueChange}
+                            placeholder="새 비밀번호"/>
+
+                        <input type="password" name="confirmPw" 
+                            value={confirmPw || ''}
+                            onChange={onValueChange}
+                            placeholder="비밀번호 확인"/>
+                    </div>
+                </div>
 
                 <button onClick={changeDevicePassword}>변경</button>
             </div>

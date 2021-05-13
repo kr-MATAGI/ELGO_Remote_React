@@ -98,13 +98,18 @@ function RotateDisplay () {
     return (
         <div className="rootWrap">
             <LoadingAnimation bIsRender={bRenderLoading}></LoadingAnimation>
-            <div className="exampleIconWrap">
-                <DisplayImg style={{transform: `rotate(${rotationDegree}deg)`}}/>
+            <div className="logoWrap">
+                <div className="logoImg"></div>
             </div>
-            
-            <div className="buttonWrap">
-                <button onClick={onClickedRotationBtn}>회전</button>
-                <button onClick={onSendRotationDegree}>적용</button>
+            <div className="btnWrap">
+                <div className="exampleIconWrap">
+                    <DisplayImg style={{transform: `rotate(${rotationDegree}deg)`}}/>
+                </div>
+                
+                <div className="buttonWrap">
+                    <button onClick={onClickedRotationBtn}>회전</button>
+                    <button onClick={onSendRotationDegree}>적용</button>
+                </div>
             </div>
         </div>
     );

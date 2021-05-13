@@ -9,7 +9,8 @@ const accessURL = (window.location.href).split("http://")[1];
 const accessIP = accessURL.split(":")[0];
 
 var accessWS = 'ws://';
-accessWS += accessIP;
+// accessWS += accessIP;
+accessWS += "192.168.0.83"
 accessWS += ':9412';
 
 const URL = accessWS;

@@ -4,6 +4,8 @@ import {ACTION} from '../components/definitions/commDefinition.js';
 import LoadingAnimation from '../animations/Loading.js';
 import { useHistory } from 'react-router-dom';
 import { Modal } from '../utils/dialog/Modal.js';
+import '../css/DeviceLogin.css';
+
 
 export default function DeviceLogin() {
     /**
@@ -94,10 +96,14 @@ export default function DeviceLogin() {
                 {modalStr}
             </Modal>
 
-            <h2>ELGO SYSTEM</h2>
+            <div className="logo">
+                <div className="logoImg"></div>
+            </div>
+            <div className="loginWrapper">
                 <input type="text" name="deviceId" placeholder="아이디를 입력하세요" value={deviceId || ''} onChange={onValueChange} />
                 <input type="password" name="devicePw" placeholder="비밀번호를 입력하세요" value={devicePw|| ''} onChange={onValueChange} />                    
-            <button onClick={deviceLoginVerify}>로그인</button>
+                <button onClick={deviceLoginVerify}>로그인</button>
+            </div>
         </div>
     );
 }
