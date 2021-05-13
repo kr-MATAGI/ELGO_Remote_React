@@ -111,7 +111,6 @@ function DeviceRemoteMain() {
                     <button type="button" >Wifi 설정</button>
                 </Link>
                 
-                {/** TODO : Insert jwt and access web server */}
                 <button type="button" onClick={onAccessExternalWAS}>기기 관리</button>
                 
                 <Link to="/manageDevice">
