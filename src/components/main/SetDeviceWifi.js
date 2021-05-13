@@ -23,13 +23,6 @@ const networkMessage = {
     warningOpenNetwork: '개방형 네트워크 사용은 권장하지 않습니다. 계속하시겠습니까?'
 }
 
-/**
- * @brief   Timeout define
- */
-const timeout = {
-    TO_MAIN_TIMEOUT: 1000,
-}
-
 export default function SetDeviceWifi () {
     /**
      * @brief   Loading Animation State
@@ -204,6 +197,7 @@ export default function SetDeviceWifi () {
             let bodyStr = null;
             if(false === response.result) {
                 bodyStr = networkMessage.ConnectFailed;
+                setModalBodyStr(bodyStr);
                 setModalBtnHide(false);
                 onRetryModal();
             }
