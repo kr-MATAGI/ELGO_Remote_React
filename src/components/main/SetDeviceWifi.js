@@ -277,12 +277,18 @@ export default function SetDeviceWifi () {
                 {modalBodyStr}
             </Modal>
 
-            <div className="titleWrap">
-                <p>{titleMessage}</p>
+            <div className="logoWrap">
+                <div className="logoImg"></div>
             </div>
 
-            <div className="wifiWrap">
-                {displayWifiList}               
+            <div className="btnWrap wifi">
+                <div className="titleWrap">
+                    <p>{titleMessage}</p>
+                </div>
+
+                <div className="wifiWrap">
+                    {displayWifiList}               
+                </div>
             </div>
         </div>
     );
