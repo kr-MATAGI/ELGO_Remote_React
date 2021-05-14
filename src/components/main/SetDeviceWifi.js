@@ -17,7 +17,7 @@ const networkMessage = {
     Searching: '무선 네트워크 검색 중 입니다.',
     SearchOk: '사용가능한 네트워크 목록',
     SearchFail: '무선 네트워크 검색을 실패했습니다.',
-    Connecting: '무선 네트워크를 연결 중 입니다. (최대 1분)',
+    Connecting: '사이니지 화면에 QR이 표시되면 다시 접속해주세요.',
     ConnectSuccess: '무선 네트워크에 연결되었습니다.',
     ConnectFailed: '무선 네트워크 연결이 실패했습니다.',
     WarningOpenNetwork: '개방형 네트워크 사용은 권장하지 않습니다. 계속하시겠습니까?'
@@ -101,7 +101,6 @@ export default function SetDeviceWifi () {
 
     /** @brief  Close Modal */
     const closeModal = () => {
-        setLoadingStatus(true);
         setModalBtnHide(true);
 
         let headerStr = selectedWifi.ssid + ' 에 연결 합니다.';
@@ -172,13 +171,15 @@ export default function SetDeviceWifi () {
                 // sort by signal
                 let wifiList = [];
                 response.wifiList.forEach(element => {               
-                    let wifiInfo = {
-                        ssid: element.ssid,
-                        freq: element.freq,
-                        signal: element.signal,
-                        enc: element.encryption
+                    if('' !== element.ssid) {
+                        let wifiInfo = {
+                            ssid: element.ssid,
+                            freq: element.freq,
+                            signal: element.signal,
+                            enc: element.encryption
+                        }
+                        wifiList.push(wifiInfo);
                     }
-                    wifiList.push(wifiInfo);
                 });
     
                 wifiList.sort((lhs, rhs) => {
@@ -221,7 +222,7 @@ export default function SetDeviceWifi () {
         }, 500);   
     }
 
-    function WifiLabel( {ssid, freq, signal, enc} ) {
+    function WifiLabel( {ssid, freq, signal, enc} ) {          
         // wifi icon
         const newSignal = signal * -1;
         let wifiDegree;
