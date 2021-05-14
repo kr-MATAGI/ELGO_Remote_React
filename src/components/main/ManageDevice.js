@@ -1,4 +1,4 @@
-import react, {useState} from 'react';
+import React, {useState} from 'react';
 import LoadingAnimation from '../../animations/Loading.js'
 import { Modal } from '../../utils/dialog/Modal.js';
 import { sendMessage, websocket } from '../../utils/websocket/RemoteWebsocket.js';
@@ -52,14 +52,17 @@ function ChangeDevicePW () {
         const response = JSON.parse(event.data);
         console.log(response);
 
-        setLoadingStatus(false);
-        if(true === response.result) {
-            setModalStatus([true, "비밀번호가 성공적으로 변경되었습니다."]);
-            openModal();
-        }
-        else{
-            setModalStatus([false, "비밀번호를 다시 입력해주세요"]);
-            openModal();
+        if(ACTION.MANAGE_DEVICE === response.action)
+        {
+            setLoadingStatus(false);
+            if(true === response.result) {
+                setModalStatus([true, "비밀번호가 성공적으로 변경되었습니다."]);
+                openModal();
+            }
+            else{
+                setModalStatus([false, "비밀번호를 다시 입력해주세요"]);
+                openModal();
+            }
         }
     }
 

@@ -20,7 +20,7 @@ const networkMessage = {
     Connecting: '무선 네트워크를 연결 중 입니다. (최대 1분)',
     ConnectSuccess: '무선 네트워크에 연결되었습니다.',
     ConnectFailed: '무선 네트워크 연결이 실패했습니다.',
-    warningOpenNetwork: '개방형 네트워크 사용은 권장하지 않습니다. 계속하시겠습니까?'
+    WarningOpenNetwork: '개방형 네트워크 사용은 권장하지 않습니다. 계속하시겠습니까?'
 }
 
 export default function SetDeviceWifi () {
@@ -92,7 +92,7 @@ export default function SetDeviceWifi () {
             headerStr = ssid;
             headerStr += ' 를 선택하셨습니다.';
         
-            bodyStr = networkMessage.warningOpenNetwork;
+            bodyStr = networkMessage.WarningOpenNetwork;
             setModalInput(false);
         }
         changeModalString(headerStr, bodyStr, null)
@@ -145,7 +145,7 @@ export default function SetDeviceWifi () {
             setModalInput(true);
         }
         else {
-            bodyStr = networkMessage.warningOpenNetwork;
+            bodyStr = networkMessage.WarningOpenNetwork;
         }
 
         changeModalString(headerStr, bodyStr, '재시도');
@@ -225,6 +225,7 @@ export default function SetDeviceWifi () {
         // wifi icon
         const newSignal = signal * -1;
         let wifiDegree;
+        
         if( 60 >= newSignal ) {
             wifiDegree = 4;
         }
@@ -242,11 +243,15 @@ export default function SetDeviceWifi () {
             <span onClick={() => {openModal(ssid)}}>
                 <li>
                     {
-                        (function() {
-                            if(4 === wifiDegree) return (<WifiDeg4 width="50"/>)
-                            else if(3 === wifiDegree) return (<WifiDeg3 width="50"/>)
-                            else if(2 === wifiDegree) return (<WifiDeg2 width="50"/>)
-                            else return (<WifiDeg1 width="50"/>)
+                        (() => {
+                            if(4 === wifiDegree)
+                                return (<WifiDeg4 width="50"/>);
+                            else if(3 === wifiDegree) 
+                                return (<WifiDeg3 width="50"/>);
+                            else if(2 === wifiDegree) 
+                                return (<WifiDeg2 width="50"/>);
+                            else 
+                                return (<WifiDeg1 width="50"/>);
                         })()
                     }
                     {
