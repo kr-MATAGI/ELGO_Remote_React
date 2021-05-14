@@ -10,7 +10,7 @@ const accessIP = accessURL.split(":")[0];
 
 var accessWS = 'ws://';
 // accessWS += accessIP;
-accessWS += "192.168.0.83"
+accessWS += "192.168.0.92"
 accessWS += ':9412';
 
 const URL = accessWS;
