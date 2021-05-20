@@ -58,7 +58,6 @@ function RotateDisplay () {
      */
     const [imgHeading, setImgHeading] = useState(DIRECTION.HEAD_TOP);
     const [rotationDegree, setRotationDegree] = useState(0);
-    console.log(imgHeading, rotationDegree);
     const onClickedRotationBtn = () => {
         setRotationDegree(rotationDegree+90);
         
@@ -91,7 +90,6 @@ function RotateDisplay () {
                 }
             })
             sendMessage(sendJson);
-            console.log(sendJson);
         }, 500);
     }
 
