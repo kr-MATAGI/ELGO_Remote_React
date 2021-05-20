@@ -89,10 +89,12 @@ function DeviceRemoteMain() {
         setShowLoadingAni(true);
 
         // Get os, udid(uuid)
-        let userLoginJson = JSON.stringify({
-            action: ACTION.USER_LOGIN
-        });
-        sendMessage(userLoginJson);
+        setTimeout(() => {
+            let userLoginJson = JSON.stringify({
+                action: ACTION.USER_LOGIN
+            });
+            sendMessage(userLoginJson);
+        }, 500);
     }
 
     return(

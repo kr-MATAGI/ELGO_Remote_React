@@ -15,7 +15,7 @@ accessWS += ':9412';
 const URL = accessWS;
 export const websocket = new WebSocket(URL);
 export default function RemoteWebsocket() {
-    useEffect(() => {    
+    useEffect(() => {
         websocket.onopen = () => {
             console.log('Webscoket is Connected');
         }
