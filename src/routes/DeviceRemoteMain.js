@@ -83,7 +83,7 @@ function DeviceRemoteMain() {
     }
 
     /**
-     * @brief   Get JWT token and acess user login server
+     * @brief   Get JWT token and redirect user login page
      */
     const onAccessExternalWAS = () => {
         setShowLoadingAni(true);
