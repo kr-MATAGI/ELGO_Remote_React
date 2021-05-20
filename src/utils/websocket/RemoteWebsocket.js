@@ -13,7 +13,7 @@ accessWS += accessIP;
 accessWS += ':9412';
 
 const URL = accessWS;
-export var websocket = new WebSocket(URL);
+export const websocket = new WebSocket(URL);
 export default function RemoteWebsocket() {
     useEffect(() => {    
         websocket.onopen = () => {
@@ -26,13 +26,10 @@ export default function RemoteWebsocket() {
 
         websocket.onclose = () => {
             console.log('Websocket is Disconnected');
-            setTimeout(() => {
-               websocket = new WebSocket(URL);
-            }, 1000);
         }
 
         websocket.onerror = (error) => {
-            console.log('Socket encountered error : ', error.message, 'Closing socket');
+            console.log('Socket encountered error : ', error, 'Closing socket');
             websocket.close();
         }
     }, []);

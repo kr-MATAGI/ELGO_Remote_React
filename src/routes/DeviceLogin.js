@@ -4,6 +4,7 @@ import {ACTION} from '../components/definitions/commDefinition.js';
 import LoadingAnimation from '../animations/Loading.js';
 import { useHistory } from 'react-router-dom';
 import { Modal } from '../utils/dialog/Modal.js';
+import { setIsLogin } from '../App.js'
 import '../css/DeviceLogin.css';
 
 
@@ -38,6 +39,7 @@ export default function DeviceLogin() {
         setLoadingStatus(false);
         if( true === recvJson.result )
         {
+            setIsLogin(true);
             history.push('/main');
         }
         else
