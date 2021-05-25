@@ -1,5 +1,5 @@
 # Action 에 따른 기능 & 동작 정리
-  * ELGO_Remote를 구현한 개발자 본인은 React를 이번 Project에서 처음 구현했기에 초급 수준이다.
+  * ELGO_Remote를 구현한 개발자 본인은 React를 이번 Project에서 처음으로 제대로 사용했기에 초급 수준이다.
   * 따라서, 코드 구조 및 Sequence는 어렵지 않다. (line 수도 많지 않음)
   * Action에 대한 기능만 알고 있다면 충분히 코드만으로 업무진행이 가능하다.
 
