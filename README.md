@@ -60,4 +60,4 @@
  * 모든 기능들은 사용자의 Mobile에서 동작하는 것을 목표로 하고 있기에, 안정적이고 더 많은 기능을 원한다면 Web이 아닌 Android / IOS Application을 만드는 것이 좋다.
  * 또한, 기능 중 Wifi를 연결하는 것은 동일한 Gateway를 가지고 있지 않은 이상, Wifi가 변경되었을 시, WebSocket 연결이 어렵다.
  * 따라서 만약 추후 Android / IOS Application을 만든다면 Bluetooth 연결을 권장한다.
- * 추가적으로 알아보았을 때, React-Native는 Bluetooth 통신이 강력하지 않다고 한다. 따라서 Flutter를 
+ * 추가적으로 알아보았을 때, React-Native는 Bluetooth 통신이 강력하지 않다고 한다. 따라서 Flutter를 고려해보는 것이 좋을지도 모른다.
