@@ -35,7 +35,7 @@ const ConvertDirectionToStr = (src) => {
             retValue = "HEAD_LEFT";
             break;
         
-            default:
+        default:
             break;
     }
 

@@ -109,7 +109,6 @@ function ChangeDevicePW () {
                     }
                 });
                 sendMessage(requestChangePw);
-                console.log(requestChangePw);
             }            
         }, 500);
     }

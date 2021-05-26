@@ -88,7 +88,7 @@ function DeviceOptions() {
                 deviceMute: sendValue[1],
                 contentPause: sendValue[2]
             }
-        })
+        });
         sendMessage(jsonRequest);
     }
 
