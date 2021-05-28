@@ -55,6 +55,23 @@
     │  ├─yarn.lock
 ```
 
+## Release 위한 build 폴더 생성 후 nginx를 이용하는 방법
+ * https://sihus.tistory.com/m/31
+ * sudo apt install nginx
+ * vi /etc/nginx/sites-enabled/default
+ * 아래와 같이 수정
+ ```
+  server {
+   listen 3000;
+   location / {
+      root /opt/ELGO/Remote/build; (이 부분 수정)
+      index index.html;
+      try_files $uri $uri/ /index.html;
+    }
+  }
+ ```
+ * sudo service nginx restart
+
 ## React를 사용하면서 아쉬운점
  * 본 Project는 React-native도 아닌 React이다. 따라서 많은 기능적 제약이 따른다.
  * 모든 기능들은 사용자의 Mobile에서 동작하는 것을 목표로 하고 있기에, 안정적이고 더 많은 기능을 원한다면 Web이 아닌 Android / IOS Application을 만드는 것이 좋다.
