@@ -50,7 +50,7 @@ export default function SetDeviceWifi () {
      * @brief   Dialog (Modal)
      */
     const [modalOpen, setModalOpen] = useState(false);
-    const [modalHeader, setModalHeader] = useState('') 
+    const [modalHeader, setModalHeader] = useState('');
     const [modalBodyStr, setModalBodyStr] = useState('');
     const [modalBtnHide, setModalBtnHide] = useState(false);
     const [modalConfirmStr, setModalConfirmStr] = useState('확인');
