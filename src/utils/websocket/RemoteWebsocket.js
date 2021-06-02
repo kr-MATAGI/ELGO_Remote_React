@@ -37,7 +37,7 @@ export default function RemoteWebsocket() {
 }
 
 /**
- * Websocket Send Message
+ * @brief   Websocket Send Message
  */
 export const sendMessage = (data) =>{
     printLog(data);
