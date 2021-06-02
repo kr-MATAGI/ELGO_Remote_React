@@ -12,15 +12,18 @@ import MangeDevice from './components/main/ManageDevice.js';
 import RotateDisplay from './components/main/RotateDisplay.js';
 import DeviceOptions from './components/manage/DeviceOptions.js';
 
+/** @brief */
 const getIsLogin = () => {
   const isLogin = sessionStorage.getItem('isLogin');
   return Boolean(isLogin);
 }
 
+/** @brief */
 export const setIsLogin = (value) => {
   sessionStorage.setItem('isLogin', value);
 }
 
+/** @brief  Main Page */
 const PublicRoute = ( { component: Component, ...rest } ) => {
   return (
     <Route
@@ -30,6 +33,7 @@ const PublicRoute = ( { component: Component, ...rest } ) => {
   );
 }
 
+/** @brief */
 const PrivateRoute = ({ component: Component, ...rest }) => {
   return (
     <Route
