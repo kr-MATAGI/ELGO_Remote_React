@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {ACTION} from '../definitions/commDefinition.js';
 import LoadingAnimation from '../../animations/Loading.js'
 import {sendMessage, websocket} from '../../utils/websocket/RemoteWebsocket.js';
+import { printLog } from '../../utils/logger/Logger.js'
 
 function DeviceOptions() {
     /**
@@ -69,7 +70,7 @@ function DeviceOptions() {
                 }
             }
             else {
-                console.log('Error - Unkwon button name');
+                printLog('Error - Unkwon button name');
             }
             
             sendChangedOptions(sendValue);

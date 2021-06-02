@@ -4,6 +4,9 @@ import { Modal } from '../../utils/dialog/Modal.js';
 import { sendMessage, websocket } from '../../utils/websocket/RemoteWebsocket.js';
 import { ACTION } from '../definitions/commDefinition.js';
 import { useHistory } from 'react-router-dom';
+import { printLog } from '../../utils/logger/Logger.js'
+
+// css
 import '../../css/ManageDevice.css';
 
 /**
@@ -50,7 +53,7 @@ function ChangeDevicePW () {
      */
     websocket.onmessage = (event) => {
         const response = JSON.parse(event.data);
-        console.log(response);
+        printLog(event.data);
 
         if(ACTION.MANAGE_DEVICE === response.action)
         {

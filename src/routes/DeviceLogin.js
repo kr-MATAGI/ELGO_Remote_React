@@ -5,6 +5,9 @@ import LoadingAnimation from '../animations/Loading.js';
 import { useHistory } from 'react-router-dom';
 import { Modal } from '../utils/dialog/Modal.js';
 import { setIsLogin } from '../App.js'
+import { printLog } from '../utils/logger/Logger.js'
+
+// css
 import '../css/DeviceLogin.css';
 
 
@@ -34,7 +37,7 @@ export default function DeviceLogin() {
     const history = useHistory();
     websocket.onmessage = (event) => {
         const recvJson = JSON.parse(event.data);
-        console.log("recvJson : ", recvJson)
+        printLog("recvJson : ", recvJson)
         
         setLoadingStatus(false);
         if( true === recvJson.result )

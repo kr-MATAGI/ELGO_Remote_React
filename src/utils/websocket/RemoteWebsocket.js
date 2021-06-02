@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { printLog } from '../logger/Logger.js'
 
 /**
  * @brief   Websocket
@@ -17,19 +18,19 @@ export const websocket = new WebSocket(URL);
 export default function RemoteWebsocket() {
     useEffect(() => {
         websocket.onopen = () => {
-            console.log('Webscoket is Connected');
+            printLog('Webscoket is Connected');
         }
 
         websocket.onmessage = (event) => {
-            console.log(event.type, event.data);
+            printLog(event.type, event.data);
         }
 
         websocket.onclose = () => {
-            console.log('Websocket is Disconnected');
+            printLog('Websocket is Disconnected');
         }
 
         websocket.onerror = (error) => {
-            console.log('Socket encountered error : ', error, 'Closing socket');
+            printLog('Socket encountered error : ', error, 'Closing socket');
             websocket.close();
         }
     }, []);
@@ -39,6 +40,6 @@ export default function RemoteWebsocket() {
  * Websocket Send Message
  */
 export const sendMessage = (data) =>{
-    console.log(data);
+    printLog(data);
     websocket.send(data);
 }

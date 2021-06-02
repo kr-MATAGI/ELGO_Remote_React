@@ -3,6 +3,7 @@ import { ReactComponent as DisplayImg } from '../../img/display.svg';
 import LoadingAnimation from '../../animations/Loading.js';
 import {sendMessage, websocket} from '../../utils/websocket/RemoteWebsocket.js';
 import { ACTION } from '../definitions/commDefinition.js'
+import { printLog } from '../../utils/logger/Logger.js'
 
 /**
  * @brief   Heading direction
@@ -73,7 +74,7 @@ function RotateDisplay () {
      */
     websocket.onmessage = (event) => {
         const response = JSON.parse(event.data);
-        console.log(response);
+        printLog(event.data);
         setLoadingStatus(false);
     }
 

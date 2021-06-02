@@ -5,6 +5,9 @@ import { ACTION } from '../components/definitions/commDefinition.js';
 import { sendMessage, websocket } from '../utils/websocket/RemoteWebsocket.js';
 import LoadingAnimation from '../animations/Loading.js';
 import { Modal } from '../utils/dialog/Modal.js';
+import { printLog } from '../utils/logger/Logger.js'
+
+// css
 import '../css/DeviceRemoteMain.css';
 
 /**
@@ -41,7 +44,7 @@ function DeviceRemoteMain() {
         setShowLoadingAni(false);
         
         let response = JSON.parse(event.data);
-        console.log(response);
+        printLog(event.data);
 
         if(ACTION.USER_LOGIN === response.action) {
             if(true === response.result) {
@@ -50,21 +53,21 @@ function DeviceRemoteMain() {
                     os: response.os,
                     uuid: response.udid // plz see a uuid, udid defintion
                 }
-                console.log(body);
+                printLog(body.os, body.uuid);
 
                 axios.post(EXT_HOST, body).then((axiosResponse) => {
-                    console.log(axiosResponse);
+                    printLog(axiosResponse);
 
                     let newToken = axiosResponse.data.newToken;
                     // link to external webserver with jwt
                     let loginPageUrl = 'https://demo.elgo.co.kr/client/login?token=';
                     loginPageUrl += newToken;
-                    console.log('logingPageUrl', loginPageUrl);
+                    printLog('logingPageUrl', loginPageUrl);
                    
                     // access external web
                     window.location.assign(loginPageUrl);
                 }).catch((error) => {
-                    console.log(error);
+                    printLog(error);
 
                     let headerStr = '접속 실패';
                     let bodyStr = '서버에 접속 실패 하였습니다.';
@@ -78,7 +81,7 @@ function DeviceRemoteMain() {
             }
         }
         else {
-            console.log('Unkown Action -', response.action);
+            printLog('Unkown Action -', response.action);
         }
     }
 

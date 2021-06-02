@@ -3,7 +3,9 @@ import LoadingAnimation from '../../animations/Loading.js'
 import { websocket, sendMessage } from '../../utils/websocket/RemoteWebsocket.js';
 import { ACTION } from '../definitions/commDefinition.js';
 import { Modal, getModalInputValue, setModalInputValue } from '../../utils/dialog/Modal.js';
+import { printLog } from '../../utils/logger/Logger.js'
 
+// icon
 import { ReactComponent as WifiDeg4 } from '../../img/wifi_full.svg';
 import { ReactComponent as WifiDeg3 } from '../../img/wifi_3.svg';
 import { ReactComponent as WifiDeg2 } from '../../img/wifi_2.svg';
@@ -162,7 +164,7 @@ export default function SetDeviceWifi () {
         setLoadingStatus(false);
         
         const response = JSON.parse(event.data);
-        console.log(response);
+        printLog(event.data);
 
         if(ACTION.UPDATE_WIFI_LIST === response.action) {
             if(true === response.result) {
@@ -204,7 +206,7 @@ export default function SetDeviceWifi () {
             }
         }
         else{
-            console.log('Error - Unkown Action', response);
+            printLog('Error - Unkown Action', event.data);
         }
     }
 
