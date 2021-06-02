@@ -103,8 +103,8 @@ function DeviceRemoteMain() {
     return(
         <div className="rootWrap">
             <LoadingAnimation bIsRender={showLoadingAni}></LoadingAnimation>
-            <Modal open={isModalOpen} cancel={onModalClose} 
-                    close={onModalClose} header={modalHeader} confirm="확인">
+            <Modal open={isModalOpen} onCancel={onModalClose} 
+                    onConfrim={onModalClose} header={modalHeader} confirm="확인">
                 {modalBody}
             </Modal>
 

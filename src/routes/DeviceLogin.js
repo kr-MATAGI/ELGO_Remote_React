@@ -97,7 +97,7 @@ export default function DeviceLogin() {
     return (
         <div className="deviceLogin">
             <LoadingAnimation bIsRender={bRenderLoading}></LoadingAnimation>
-            <Modal open={modalOpen} cancel={closeModal} close={closeModal} header="로그인" confirm="확인">
+            <Modal open={modalOpen} onCancel={closeModal} onConfirm={closeModal} header="로그인" confirm="확인">
                 {modalStr}
             </Modal>
 

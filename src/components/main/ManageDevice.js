@@ -119,7 +119,7 @@ function ChangeDevicePW () {
     return (
         <div className="rootWrap">
             <LoadingAnimation bIsRender={bRenderLoading}></LoadingAnimation>
-            <Modal open={modalOpen} cancel={cancelModal} close={closeModal} header="비밀번호 변경" confirm="확인">
+            <Modal open={modalOpen} onCancel={cancelModal} onConfirm={closeModal} header="비밀번호 변경" confirm="확인">
                 {modalStatus[1]}
             </Modal>
 

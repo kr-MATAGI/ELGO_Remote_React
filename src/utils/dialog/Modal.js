@@ -9,7 +9,7 @@ import '../../css/Modal.css';
 var extInputValue = '';
 export function Modal ( props ) {
     // props
-    const { open, cancel, close, header, confirm, hideBtn, isInput, inputType, placeholderStr } = props;
+    const { open, onCancel, onConfirm, header, confirm, hideBtn, isInput, inputType, placeholderStr } = props;
     
     // useState
     const [inputStr, setInputStr] = useState('');
@@ -49,9 +49,9 @@ export function Modal ( props ) {
                         }
                     </main>
                     <footer>
-                        { hideBtn ? null : <button className="cancel" onClick={cancel}>취소</button>}
+                        { hideBtn ? null : <button className="cancel" onClick={onCancel}>취소</button>}
                         {" "}
-                        { hideBtn ? null : <button className="close" onClick={close}>{confirm}</button>}
+                        { hideBtn ? null : <button className="confirm" onClick={onConfirm}>{confirm}</button>}
                     </footer>
                 </section>
             ) : null }
