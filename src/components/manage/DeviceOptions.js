@@ -99,7 +99,7 @@ function DeviceOptions() {
     websocket.onmessage = (event) =>{
         setLoadingStatus(false);
         const response = JSON.parse(event.data);
-        console.log(response);
+        printLog(response);
     }
 
     return(
