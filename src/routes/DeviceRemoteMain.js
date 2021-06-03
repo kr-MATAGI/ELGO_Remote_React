@@ -82,6 +82,15 @@ function DeviceRemoteMain() {
     }
 
     /**
+     * @brief   Websocket onclose override
+     */
+    websocket.onclose = () => {
+        let headerStr = '접속 실패';
+        let bodyStr = '기기와 연결이 해제되었습니다.';
+        onModalOpenControl(true, headerStr, bodyStr);
+    }
+
+    /**
      * @brief   Get JWT token and redirect user login page
      */
     const onAccessExternalWAS = () => {
@@ -99,11 +108,10 @@ function DeviceRemoteMain() {
     return(
         <div className="rootWrap">
             <LoadingAnimation bIsRender={showLoadingAni}></LoadingAnimation>
-            {/*  Not using
-                <Modal open={isModalOpen} onCancel={onModalClose} 
-                    onConfrim={onModalClose} header={modalHeader} confirm="확인">
+            <Modal open={isModalOpen} onCancel={onModalClose} 
+                    onConfirm={onModalClose} header={modalHeader} confirm="확인">
                 {modalBody}
-            </Modal> */}
+            </Modal>
 
             <div className="logoWrap">
                 <div className="logoImg"></div>
