@@ -68,10 +68,6 @@ function DeviceRemoteMain() {
                     window.location.assign(loginPageUrl);
                 }).catch((error) => {
                     printLog(error);
-
-                    let headerStr = '접속 실패';
-                    let bodyStr = '서버에 접속 실패 하였습니다.';
-                    onModalOpenControl(true, headerStr, bodyStr);
                 });
             }
             else {
@@ -103,10 +99,11 @@ function DeviceRemoteMain() {
     return(
         <div className="rootWrap">
             <LoadingAnimation bIsRender={showLoadingAni}></LoadingAnimation>
-            <Modal open={isModalOpen} onCancel={onModalClose} 
+            {/*  Not using
+                <Modal open={isModalOpen} onCancel={onModalClose} 
                     onConfrim={onModalClose} header={modalHeader} confirm="확인">
                 {modalBody}
-            </Modal>
+            </Modal> */}
 
             <div className="logoWrap">
                 <div className="logoImg"></div>
