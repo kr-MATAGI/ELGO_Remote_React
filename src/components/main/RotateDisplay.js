@@ -96,7 +96,7 @@ function RotateDisplay () {
 
     return (
         <div className="rootWrap">
-            <LoadingAnimation bIsRender={bRenderLoading}></LoadingAnimation>    
+            <LoadingAnimation bIsRender={bRenderLoading}></LoadingAnimation>
             <div className="logoWrap">
                 <div className="logoImg"></div>
             </div>
