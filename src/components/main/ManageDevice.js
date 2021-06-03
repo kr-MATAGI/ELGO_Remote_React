@@ -128,7 +128,7 @@ function ChangeDevicePW () {
             </div>
 
             <div className="pwInputWrap">
-                <p>ELGO_REMOTE 접속 비밀번호 변경</p>
+                <p>사이니지 컨트롤 접속 비밀번호 변경</p>
 
                 <div className="pwInpWrap">
                     <div className="pwInpImgWrap">
