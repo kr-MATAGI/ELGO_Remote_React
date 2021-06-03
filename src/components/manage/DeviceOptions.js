@@ -22,7 +22,7 @@ function DeviceOptions() {
     const [contentPause, setContentPause] = useState(false);
 
     // button string (value)
-    const [displaySleepStr, setSleepStr] = useState('절전 모드 켜기');
+    const [displaySleepStr, setSleepStr] = useState('절전 모드 설정');
     const [deviceMuteStr, setMuteStr] = useState('음소거');
     const [contentPauseStr, setPauseStr] = useState('멈춤');
 
@@ -37,12 +37,12 @@ function DeviceOptions() {
                 if(false === displaySleep) {
                     sendValue[0] = true;
                     setDisplaySleep(true);
-                    setSleepStr('절전 모드 끄기');
+                    setSleepStr('절전 모드 해제');
                 }
                 else {
                     sendValue[0] = false;
                     setDisplaySleep(false);
-                    setSleepStr('절전 모드 켜기');
+                    setSleepStr('절전 모드 설정');
                 }
             }
             else if ('deviceMute' === name) {

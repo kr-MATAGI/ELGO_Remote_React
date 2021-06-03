@@ -96,11 +96,12 @@ function RotateDisplay () {
 
     return (
         <div className="rootWrap">
-            <LoadingAnimation bIsRender={bRenderLoading}></LoadingAnimation>
+            <LoadingAnimation bIsRender={bRenderLoading}></LoadingAnimation>    
             <div className="logoWrap">
                 <div className="logoImg"></div>
             </div>
             <div className="btnWrap">
+                <p>회전 후 적용을 눌러주세요</p>
                 <div className="exampleIconWrap">
                     <DisplayImg style={{transform: `rotate(${rotationDegree}deg)`}}/>
                 </div>
