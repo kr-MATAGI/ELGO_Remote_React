@@ -10,7 +10,6 @@ import { printLog } from '../utils/logger/Logger.js'
 // css
 import '../css/DeviceLogin.css';
 
-
 export default function DeviceLogin() {
     /**
      * @brief   Loading Animation

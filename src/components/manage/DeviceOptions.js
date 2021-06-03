@@ -22,9 +22,9 @@ function DeviceOptions() {
     const [contentPause, setContentPause] = useState(false);
 
     // button string (value)
-    const [displaySleepStr, setSleepStr] = useState('Display OFF');
-    const [deviceMuteStr, setMuteStr] = useState('Mute OFF');
-    const [contentPauseStr, setPauseStr] = useState('Pause');
+    const [displaySleepStr, setSleepStr] = useState('절전 모드 켜기');
+    const [deviceMuteStr, setMuteStr] = useState('음소거');
+    const [contentPauseStr, setPauseStr] = useState('멈춤');
 
     const changeDeviceOptions = (element) => {
         setLoadingStatus(true);
@@ -37,36 +37,36 @@ function DeviceOptions() {
                 if(false === displaySleep) {
                     sendValue[0] = true;
                     setDisplaySleep(true);
-                    setSleepStr('Display ON');
+                    setSleepStr('절전 모드 끄기');
                 }
                 else {
                     sendValue[0] = false;
                     setDisplaySleep(false);
-                    setSleepStr('Display OFF');
+                    setSleepStr('절전 모드 켜기');
                 }
             }
             else if ('deviceMute' === name) {
                 if(false === deviceMute) {
                     sendValue[1] = true;
                     setDeviceMute(true);
-                    setMuteStr('Mute ON');
+                    setMuteStr('음소거 해제');
                 }
                 else {
                     sendValue[1] = false;
                     setDeviceMute(false);
-                    setMuteStr('Mute OFF');
+                    setMuteStr('음소거');
                 }
             }
             else if ('contentPause' === name) {
                 if(false === contentPause) {
                     sendValue[2] = true;
                     setContentPause(true);
-                    setPauseStr("Play");
+                    setPauseStr("재생");
                 }
                 else {
                     sendValue[2] = false;
                     setContentPause(false);
-                    setPauseStr("Pause");
+                    setPauseStr("멈춤");
                 }
             }
             else {
@@ -110,7 +110,7 @@ function DeviceOptions() {
                 <div className="logoImg"></div>
             </div>
             <div className="btnWrap">
-                    <p>Device Options</p>
+                <p>기기 재생 옵션</p>
 
                 <input type="button" name="displaySleep" 
                         value={displaySleepStr || ''} onClick={changeDeviceOptions} />
