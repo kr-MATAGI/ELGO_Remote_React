@@ -279,8 +279,8 @@ export default function SetDeviceWifi () {
     return(
         <div className="rootWrap">
             <LoadingAnimation bIsRender={loadingStatus}></LoadingAnimation>
-            <Modal open={modalOpen} onClose={closeModal} header={modalHeader} hideBtn={modalBtnHide} 
-                    confirm={modalConfirmStr} onConfirm={onCanelModal}
+            <Modal open={modalOpen} onConfirm={closeModal} header={modalHeader} hideBtn={modalBtnHide} 
+                    confirm={modalConfirmStr} onCancel={onCanelModal}
                     isInput={modalInput} inputType="password" placeholderStr="Password...">
                 {modalBodyStr}
             </Modal>
