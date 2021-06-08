@@ -39,7 +39,7 @@ function DeviceRemoteMain() {
     /**
      * @brief   Websocket onmessage override
      */
-    const EXT_HOST = 'https://demo.elgo.co.kr/client/jwt/user'
+    const EXT_HOST = 'https://app.elgo.co.kr/client/jwt/user'
     websocket.onmessage = (event) =>{
         setShowLoadingAni(false);
         
@@ -60,7 +60,7 @@ function DeviceRemoteMain() {
 
                     let newToken = axiosResponse.data.newToken;
                     // link to external webserver with jwt
-                    let loginPageUrl = 'https://demo.elgo.co.kr/client/login?token=';
+                    let loginPageUrl = 'https://app.elgo.co.kr/client/login?token=';
                     loginPageUrl += newToken;
                     printLog('logingPageUrl', loginPageUrl);
                    
