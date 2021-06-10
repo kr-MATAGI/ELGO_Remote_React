@@ -1,6 +1,6 @@
 import React from 'react'
 
-const debugMode = true;
+const debugMode = false;
 
 export const printLog = (...args) => {
     if(true == debugMode) {
